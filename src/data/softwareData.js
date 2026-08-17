@@ -136,5 +136,18 @@ export const softwareList = [
     version: 'v3.0.20',
     downloadUrl: 'https://www.videolan.org/vlc/',
     officialSite: 'https://www.videolan.org/'
+  },
+  {
+    id: 'malayalam-typing',
+    name: 'Malayalam Typing Tools',
+    category: 'productivity',
+    icon: 'Code',
+    tagline: 'Malayalam Keyboard & Indic Language Input Utility',
+    description: 'Essential Malayalam typing tool for students, typists, and IT technicians. Enables smooth Malayalam input & font support on Windows.',
+    os: ['Windows'],
+    license: 'Freeware',
+    version: 'Latest',
+    downloadUrl: 'https://drive.google.com/file/d/1V-Oa2lPRPbE0pWAf_h5j_WhuBeqJlbFl/view?usp=sharing',
+    officialSite: 'https://drive.google.com/file/d/1V-Oa2lPRPbE0pWAf_h5j_WhuBeqJlbFl/view?usp=sharing'
   }
 ];
