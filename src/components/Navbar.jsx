@@ -63,18 +63,7 @@ export default function Navbar({ activeTab, setActiveTab }) {
               );
             })}
 
-            <li>
-              <a 
-                href="https://github.com/vishn2015stp/cyberwizard.git" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="btn btn-outline btn-sm"
-                style={{ marginLeft: '0.5rem' }}
-              >
-                <Github size={16} />
-                <span>GitHub Repo</span>
-              </a>
-            </li>
+
           </ul>
         </nav>
       </div>

@@ -61,22 +61,7 @@ export default function Footer({ setActiveTab }) {
             </ul>
           </div>
 
-          {/* Repository & Open Source */}
-          <div>
-            <h4 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '1rem', color: 'var(--purple)' }}>GitHub Repository</h4>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1rem' }}>
-              Open-source technician toolkit hosted on GitHub.
-            </p>
-            <a 
-              href="https://github.com/vishn2015stp/cyberwizard.git" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="btn btn-secondary btn-sm"
-            >
-              <Github size={16} />
-              <span>vishn2015stp/cyberwizard</span>
-            </a>
-          </div>
+
         </div>
 
         <div style={{
