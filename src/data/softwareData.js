@@ -1,0 +1,140 @@
+export const softwareCategories = [
+  { id: 'all', label: 'All Software' },
+  { id: 'diagnostics', label: 'Hardware & Diagnostics' },
+  { id: 'technician', label: 'Technician & Network Tools' },
+  { id: 'utilities', label: 'Archive & Disk Utilities' },
+  { id: 'productivity', label: 'Dev & Student Productivity' }
+];
+
+export const softwareList = [
+  {
+    id: 'hwinfo',
+    name: 'HWiNFO',
+    category: 'diagnostics',
+    icon: 'Cpu',
+    tagline: 'Comprehensive Hardware Monitoring & Analysis',
+    description: 'In-depth hardware monitoring tool providing real-time CPU/GPU temperatures, voltages, sensor logs, and detailed hardware specs.',
+    os: ['Windows'],
+    license: 'Free / Freeware',
+    version: 'v8.00+',
+    downloadUrl: 'https://www.hwinfo.com/download/',
+    officialSite: 'https://www.hwinfo.com/'
+  },
+  {
+    id: 'cpuz',
+    name: 'CPU-Z',
+    category: 'diagnostics',
+    icon: 'Activity',
+    tagline: 'System & Processor Information Utility',
+    description: 'Freeware tool that gathers information on main hardware components: CPU name/codename, motherboard, RAM timings, and memory SPD.',
+    os: ['Windows', 'Android'],
+    license: 'Freeware',
+    version: 'v2.09',
+    downloadUrl: 'https://www.cpuid.com/softwares/cpu-z.html',
+    officialSite: 'https://www.cpuid.com/'
+  },
+  {
+    id: 'crystaldiskinfo',
+    name: 'CrystalDiskInfo',
+    category: 'diagnostics',
+    icon: 'HardDrive',
+    tagline: 'HDD/SSD S.M.A.R.T. Health Inspector',
+    description: 'Monitors HDD and SSD health status, reads S.M.A.R.T attributes, tracks operating temperatures, and alerts to disk failures.',
+    os: ['Windows'],
+    license: 'Open Source (MIT)',
+    version: 'v9.2+',
+    downloadUrl: 'https://crystalmark.info/en/software/crystaldiskinfo/',
+    officialSite: 'https://crystalmark.info/'
+  },
+  {
+    id: 'wireshark',
+    name: 'Wireshark',
+    category: 'technician',
+    icon: 'Network',
+    tagline: 'World Premier Network Protocol Analyzer',
+    description: 'Industry-standard packet capture tool for network troubleshooting, analysis, security audits, and protocol education.',
+    os: ['Windows', 'Linux', 'macOS'],
+    license: 'Open Source (GPL)',
+    version: 'v4.2.3',
+    downloadUrl: 'https://www.wireshark.org/download.html',
+    officialSite: 'https://www.wireshark.org/'
+  },
+  {
+    id: 'putty',
+    name: 'PuTTY',
+    category: 'technician',
+    icon: 'Terminal',
+    tagline: 'SSH, Telnet & Serial Console Client',
+    description: 'Lightweight, essential terminal client for connecting to remote servers, network switches, routers, and serial ports.',
+    os: ['Windows', 'Linux'],
+    license: 'Open Source (MIT)',
+    version: 'v0.81',
+    downloadUrl: 'https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html',
+    officialSite: 'https://www.putty.org/'
+  },
+  {
+    id: 'anydesk',
+    name: 'AnyDesk',
+    category: 'technician',
+    icon: 'Monitor',
+    tagline: 'Remote Desktop & Remote Assistance Tool',
+    description: 'Fast remote desktop application for providing remote tech support, accessing office PCs, and managing distant servers.',
+    os: ['Windows', 'macOS', 'Linux', 'Android'],
+    license: 'Free for Personal Use',
+    version: 'v8.0+',
+    downloadUrl: 'https://anydesk.com/en/downloads',
+    officialSite: 'https://anydesk.com/'
+  },
+  {
+    id: 'rufus',
+    name: 'Rufus',
+    category: 'utilities',
+    icon: 'Usb',
+    tagline: 'Bootable USB Flash Drive Creator',
+    description: 'Ultra-fast utility to create bootable USB drives from ISO images for Windows, Linux, and diagnostic live environments.',
+    os: ['Windows'],
+    license: 'Open Source (GPL v3)',
+    version: 'v4.4',
+    downloadUrl: 'https://rufus.ie/',
+    officialSite: 'https://rufus.ie/'
+  },
+  {
+    id: 'sevenzip',
+    name: '7-Zip',
+    category: 'utilities',
+    icon: 'Archive',
+    tagline: 'High-Compression File Archiver',
+    description: 'Essential open-source file archiver supporting 7z, ZIP, RAR, TAR, GZ, and ISO formats with high compression ratios.',
+    os: ['Windows', 'Linux'],
+    license: 'Open Source (GNU LGPL)',
+    version: 'v24.01',
+    downloadUrl: 'https://www.7-zip.org/download.html',
+    officialSite: 'https://www.7-zip.org/'
+  },
+  {
+    id: 'vscode',
+    name: 'Visual Studio Code',
+    category: 'productivity',
+    icon: 'Code',
+    tagline: 'Code Editor for Technicians & Developers',
+    description: 'Popular code editor equipped with built-in Git, integrated terminal, syntax highlighting, and thousands of extensions.',
+    os: ['Windows', 'macOS', 'Linux'],
+    license: 'Free / Open Core',
+    version: 'v1.87+',
+    downloadUrl: 'https://code.visualstudio.com/Download',
+    officialSite: 'https://code.visualstudio.com/'
+  },
+  {
+    id: 'vlc',
+    name: 'VLC Media Player',
+    category: 'productivity',
+    icon: 'PlayCircle',
+    tagline: 'Universal Open Source Media Player',
+    description: 'Plays virtually all video and audio codecs, streaming protocols, and media files without requiring external codec packs.',
+    os: ['Windows', 'macOS', 'Linux', 'Android'],
+    license: 'Open Source (GPL)',
+    version: 'v3.0.20',
+    downloadUrl: 'https://www.videolan.org/vlc/',
+    officialSite: 'https://www.videolan.org/'
+  }
+];
