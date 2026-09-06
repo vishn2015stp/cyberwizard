@@ -2,20 +2,20 @@ import React, { useState, useEffect, useRef } from 'react';
 import { 
   Gamepad2, 
   Maximize2, 
-  RotateCcw, 
   Play, 
-  Trophy, 
   ExternalLink, 
+  Search,
+  Shuffle,
   Sparkles,
-  Zap,
-  Car
+  Zap
 } from 'lucide-react';
 
 export const gameCategories = [
   { id: 'all', label: 'All Games' },
   { id: '3D Racing', label: '🏎️ 3D Racing' },
   { id: 'Retro Arcade', label: '🕹️ Retro Arcade' },
-  { id: 'Puzzle & Logic', label: '🧩 Puzzle & Logic' }
+  { id: 'Puzzle & Logic', label: '🧩 Puzzle & Logic' },
+  { id: 'Action & Strategy', label: '⚔️ Action & Strategy' }
 ];
 
 export const gamesList = [
@@ -50,6 +50,16 @@ export const gamesList = [
     sourceUrl: 'https://github.com/submariner/3d-racing'
   },
   {
+    id: 'trigger-rally',
+    title: 'Trigger Rally 3D WebGL',
+    category: '3D Racing',
+    type: 'iframe',
+    embedUrl: 'https://triggerrally.com/',
+    description: 'Fast 3D single-player rally racing game with realistic physics rendered in WebGL.',
+    author: 'Jasmine Langridge & Team',
+    sourceUrl: 'https://github.com/jgrig/trigger-rally'
+  },
+  {
     id: 'snake',
     title: 'Cyber Snake Arcade',
     category: 'Retro Arcade',
@@ -79,6 +89,16 @@ export const gamesList = [
     sourceUrl: 'https://github.com/gabrielecirulli/2048'
   },
   {
+    id: 'alien-invasion',
+    title: 'Alien Invasion HTML5 Shooter',
+    category: 'Action & Strategy',
+    type: 'iframe',
+    embedUrl: 'https://cykod.github.io/AlienInvasion/',
+    description: 'Vertical space shooter arcade game built with HTML5 canvas & Javascript.',
+    author: 'Pascal Rettig (Cykod)',
+    sourceUrl: 'https://github.com/cykod/AlienInvasion'
+  },
+  {
     id: 'clumsy-bird',
     title: 'Clumsy Bird (Flappy Clone)',
     category: 'Retro Arcade',
@@ -97,6 +117,26 @@ export const gamesList = [
     description: 'Classic arcade maze game built using HTML5 Canvas & JS.',
     author: 'Dale Harvey / Paul Macek',
     sourceUrl: 'https://github.com/macek/html5-pacman'
+  },
+  {
+    id: 'sudoku',
+    title: 'Sudoku Open-Source Logic',
+    category: 'Puzzle & Logic',
+    type: 'iframe',
+    embedUrl: 'https://sudoku-online.github.io/',
+    description: 'Clean open-source Sudoku logic puzzle with multiple difficulty grids.',
+    author: 'Sudoku Open-Source Team',
+    sourceUrl: 'https://github.com/sudoku-online/sudoku-online.github.io'
+  },
+  {
+    id: 'flexbox-defense',
+    title: 'Flexbox Defense Tower Game',
+    category: 'Puzzle & Logic',
+    type: 'iframe',
+    embedUrl: 'http://www.flexboxdefense.com/',
+    description: 'Tower defense strategy game where you position turrets using CSS flexbox commands.',
+    author: 'Channing Allen',
+    sourceUrl: 'https://github.com/channingallen/flexbox-defense'
   }
 ];
 
@@ -270,14 +310,24 @@ function NativeCyberSnake() {
 
 export default function WebGames() {
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedGame, setSelectedGame] = useState(gamesList[0]);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   const containerRef = useRef(null);
 
-  const filteredGames = gamesList.filter(g => 
-    selectedCategory === 'all' || g.category === selectedCategory
-  );
+  const filteredGames = gamesList.filter(g => {
+    const matchesCat = selectedCategory === 'all' || g.category === selectedCategory;
+    const matchesSearch = g.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          g.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          g.category.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCat && matchesSearch;
+  });
+
+  const handleRandomGame = () => {
+    const randomIndex = Math.floor(Math.random() * gamesList.length);
+    setSelectedGame(gamesList[randomIndex]);
+  };
 
   const toggleFullscreen = () => {
     if (!containerRef.current) return;
@@ -294,40 +344,69 @@ export default function WebGames() {
     <section style={{ maxWidth: '1100px', margin: '0 auto' }}>
       {/* Page Header */}
       <div style={{ marginBottom: '1.5rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-          <Gamepad2 className="text-cyan" size={28} />
-          <h2 style={{ fontSize: '1.8rem', fontWeight: 800 }}>Free Open-Source <span className="text-cyan">Web & 3D Racing Games</span></h2>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '0.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <Gamepad2 className="text-cyan" size={28} />
+            <h2 style={{ fontSize: '1.8rem', fontWeight: 800 }}>Open-Source <span className="text-cyan">Games Catalog</span></h2>
+          </div>
+
+          <button className="btn btn-secondary btn-sm" onClick={handleRandomGame}>
+            <Shuffle size={15} />
+            <span>🎲 Surprise Me (Random Game)</span>
+          </button>
         </div>
+
         <p style={{ color: 'var(--text-muted)' }}>
-          Play 3D WebGL racing games, retro arcade classics, and logic puzzles directly inside your browser.
+          Explore an expansive catalog of open-source 3D racing, retro arcade classics, space shooters, and logic puzzles.
         </p>
       </div>
 
-      {/* Category Pills & Game Selector */}
+      {/* Control Bar: Category Filters & Search */}
       <div style={{ marginBottom: '1.5rem' }}>
-        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
-          {gameCategories.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => {
-                setSelectedCategory(cat.id);
-                const firstMatch = gamesList.find(g => cat.id === 'all' || g.category === cat.id);
-                if (firstMatch) setSelectedGame(firstMatch);
-              }}
-              className={`btn btn-sm ${selectedCategory === cat.id ? 'btn-primary' : 'btn-outline'}`}
-            >
-              <span>{cat.label}</span>
-            </button>
-          ))}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+          
+          {/* Category Pills */}
+          <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+            {gameCategories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => {
+                  setSelectedCategory(cat.id);
+                  const firstMatch = gamesList.find(g => cat.id === 'all' || g.category === cat.id);
+                  if (firstMatch) setSelectedGame(firstMatch);
+                }}
+                className={`btn btn-sm ${selectedCategory === cat.id ? 'btn-primary' : 'btn-outline'}`}
+              >
+                <span>{cat.label}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Search Box */}
+          <div style={{ minWidth: '220px', maxWidth: '280px', width: '100%' }}>
+            <div className="search-box">
+              <Search className="search-icon" size={16} />
+              <input 
+                type="text"
+                className="search-input"
+                placeholder="Search games..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{ padding: '0.45rem 0.85rem 0.45rem 2.4rem', fontSize: '0.85rem' }}
+              />
+            </div>
+          </div>
+
         </div>
 
-        {/* Game Title Buttons */}
+        {/* Game Selection Buttons */}
         <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
           {filteredGames.map((game) => (
             <button
               key={game.id}
               onClick={() => setSelectedGame(game)}
               className={`btn btn-sm ${selectedGame.id === game.id ? 'btn-secondary' : 'btn-outline'}`}
+              style={{ fontSize: '0.82rem' }}
             >
               <span>{game.title}</span>
             </button>
@@ -398,7 +477,7 @@ export default function WebGames() {
         {/* Game Footer Details */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem', flexWrap: 'wrap', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
           <div>{selectedGame.description}</div>
-          <div>Author / Developer: <strong className="text-cyan">{selectedGame.author}</strong></div>
+          <div>Developer / License: <strong className="text-cyan">{selectedGame.author}</strong></div>
         </div>
       </div>
     </section>
