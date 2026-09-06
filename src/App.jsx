@@ -11,21 +11,29 @@ import Footer from './components/Footer';
 export default function App() {
   const [activeTab, setActiveTab] = useState('fundamentals');
 
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div className="app-container">
-      <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Navbar activeTab={activeTab} setActiveTab={handleTabChange} />
       
       <main className="main-content">
-        <Hero setActiveTab={setActiveTab} />
-
-        {activeTab === 'fundamentals' && <Fundamentals />}
+        {activeTab === 'fundamentals' && (
+          <>
+            <Hero setActiveTab={handleTabChange} />
+            <Fundamentals />
+          </>
+        )}
         {activeTab === 'software' && <SoftwareHub />}
         {activeTab === 'commands' && <CommandCheatsheet />}
-        {activeTab === 'wizard' && <DiagnosticWizard setActiveTab={setActiveTab} />}
+        {activeTab === 'wizard' && <DiagnosticWizard setActiveTab={handleTabChange} />}
         {activeTab === 'quiz' && <Quiz />}
       </main>
 
-      <Footer setActiveTab={setActiveTab} />
+      <Footer setActiveTab={handleTabChange} />
     </div>
   );
 }

@@ -128,7 +128,7 @@ export default function Quiz() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '0.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <HelpCircle className="text-pink" size={28} />
-            <h2 style={{ fontSize: '1.8rem', fontWeight: 800 }}>Unlimited <span className="text-pink">Live Tech Quiz</span></h2>
+            <h2 style={{ fontSize: '1.8rem', fontWeight: 800 }}>Live Tech <span className="text-pink">Quiz</span></h2>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
@@ -144,7 +144,7 @@ export default function Quiz() {
         </p>
       </div>
 
-      {/* Control Bar: Difficulty Filters & Unlimited Stats */}
+      {/* Control Bar: Difficulty Filters & Quiz Stats */}
       <div className="glass-card" style={{ padding: '1.25rem', marginBottom: '2rem' }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
           
@@ -385,7 +385,7 @@ export default function Quiz() {
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'center' }}>
             <button className="btn btn-primary" onClick={handleLoadNextBatch}>
               <Zap size={18} />
-              <span>Load Next Internet Batch (Unlimited)</span>
+              <span>Load Next Internet Batch</span>
             </button>
 
             <button className="btn btn-outline" onClick={() => fetchQuestions(difficulty)}>
