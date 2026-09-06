@@ -6,9 +6,9 @@ import {
   Terminal, 
   Stethoscope, 
   HelpCircle, 
+  Gamepad2,
   Menu, 
-  X,
-  Github
+  X
 } from 'lucide-react';
 
 export default function Navbar({ activeTab, setActiveTab }) {
@@ -19,7 +19,8 @@ export default function Navbar({ activeTab, setActiveTab }) {
     { id: 'software', label: 'Software Hub', icon: Download },
     { id: 'commands', label: 'CLI Commands', icon: Terminal },
     { id: 'wizard', label: 'Diagnostics', icon: Stethoscope },
-    { id: 'quiz', label: 'Tech Quiz', icon: HelpCircle }
+    { id: 'quiz', label: 'Tech Quiz', icon: HelpCircle },
+    { id: 'games', label: 'Web Games', icon: Gamepad2 }
   ];
 
   const handleTabClick = (tabId) => {

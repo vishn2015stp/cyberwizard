@@ -6,6 +6,7 @@ import SoftwareHub from './components/SoftwareHub';
 import CommandCheatsheet from './components/CommandCheatsheet';
 import DiagnosticWizard from './components/DiagnosticWizard';
 import Quiz from './components/Quiz';
+import WebGames from './components/WebGames';
 import Footer from './components/Footer';
 
 export default function App() {
@@ -31,6 +32,7 @@ export default function App() {
         {activeTab === 'commands' && <CommandCheatsheet />}
         {activeTab === 'wizard' && <DiagnosticWizard setActiveTab={handleTabChange} />}
         {activeTab === 'quiz' && <Quiz />}
+        {activeTab === 'games' && <WebGames />}
       </main>
 
       <Footer setActiveTab={handleTabChange} />

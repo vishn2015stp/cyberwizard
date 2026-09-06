@@ -58,6 +58,11 @@ export default function Footer({ setActiveTab }) {
                   Tech Knowledge Quiz
                 </button>
               </li>
+              <li>
+                <button onClick={() => setActiveTab('games')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
+                  Free Web Games
+                </button>
+              </li>
             </ul>
           </div>
 
