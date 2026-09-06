@@ -12,15 +12,12 @@ import {
   Zap,
   Flame,
   Trophy,
-  ShieldAlert,
   ShieldCheck,
-  Radio,
-  RefreshCw,
-  CheckCircle2,
-  Cpu,
-  Globe,
-  Activity,
-  AlertTriangle
+  ArrowUp,
+  ArrowDown,
+  ArrowLeft as ArrowLeftIcon,
+  ArrowRight as ArrowRightIcon,
+  Smartphone
 } from 'lucide-react';
 
 export const gameCategories = [
@@ -31,7 +28,7 @@ export const gameCategories = [
   { id: 'Action & Strategy', label: '⚔️ Action & Strategy' }
 ];
 
-// Pre-Verified 100% Working Core Games (Tested & Double-Checked)
+// Pre-Verified 100% Working Core Games
 export const initialGamesList = [
   {
     id: '3d-racer',
@@ -41,8 +38,7 @@ export const initialGamesList = [
     description: 'High-speed 3D perspective highway racer rendered natively in canvas with traffic dodging & speed tracking.',
     author: 'Cyber Wizard Native',
     sourceUrl: 'Built-in',
-    isAutoDiscovered: false,
-    verifiedStatus: 'PRE-VERIFIED NATIVE'
+    isAutoDiscovered: false
   },
   {
     id: 'hexgl',
@@ -53,8 +49,7 @@ export const initialGamesList = [
     description: 'High-speed futuristic 3D sci-fi hovercraft racing game built with Three.js & WebGL.',
     author: 'Thibaut Despoulain (BKcore)',
     sourceUrl: 'https://github.com/bkcore/HexGL',
-    isAutoDiscovered: false,
-    verifiedStatus: 'HTTP 200 VERIFIED'
+    isAutoDiscovered: false
   },
   {
     id: 'snake',
@@ -64,8 +59,7 @@ export const initialGamesList = [
     description: 'Classic arcade snake game rendered natively in neon cyber canvas with high score tracking.',
     author: 'Cyber Wizard Native',
     sourceUrl: 'Built-in',
-    isAutoDiscovered: false,
-    verifiedStatus: 'PRE-VERIFIED NATIVE'
+    isAutoDiscovered: false
   },
   {
     id: 'native-breakout',
@@ -75,8 +69,7 @@ export const initialGamesList = [
     description: 'Pure HTML5 canvas brick smasher with neon laser ball physics and high score tracking.',
     author: 'Cyber Wizard Native',
     sourceUrl: 'Built-in',
-    isAutoDiscovered: false,
-    verifiedStatus: 'PRE-VERIFIED NATIVE'
+    isAutoDiscovered: false
   },
   {
     id: '2048',
@@ -87,8 +80,7 @@ export const initialGamesList = [
     description: 'Join the numbers and get to the 2048 tile! Popular open-source sliding puzzle.',
     author: 'Gabriele Cirulli',
     sourceUrl: 'https://github.com/gabrielecirulli/2048',
-    isAutoDiscovered: false,
-    verifiedStatus: 'HTTP 200 VERIFIED'
+    isAutoDiscovered: false
   },
   {
     id: 'alien-invasion',
@@ -99,8 +91,7 @@ export const initialGamesList = [
     description: 'Vertical space shooter arcade game built with HTML5 canvas & Javascript.',
     author: 'Pascal Rettig (Cykod)',
     sourceUrl: 'https://github.com/cykod/AlienInvasion',
-    isAutoDiscovered: false,
-    verifiedStatus: 'HTTP 200 VERIFIED'
+    isAutoDiscovered: false
   },
   {
     id: 'clumsy-bird',
@@ -111,8 +102,7 @@ export const initialGamesList = [
     description: 'Open-source HTML5 canvas bird flight arcade game.',
     author: 'Ellison Leão',
     sourceUrl: 'https://github.com/ellisonleao/clumsy-bird',
-    isAutoDiscovered: false,
-    verifiedStatus: 'HTTP 200 VERIFIED'
+    isAutoDiscovered: false
   },
   {
     id: 'sudoku',
@@ -123,12 +113,10 @@ export const initialGamesList = [
     description: 'Clean open-source Sudoku logic puzzle with multiple difficulty grids.',
     author: 'Sudoku Open-Source Team',
     sourceUrl: 'https://github.com/sudoku-online/sudoku-online.github.io',
-    isAutoDiscovered: false,
-    verifiedStatus: 'HTTP 200 VERIFIED'
+    isAutoDiscovered: false
   }
 ];
 
-// Double-Checked Pool of 100% Working Open-Source Games
 export const discoverableGamesPool = [
   {
     id: 'track-not-found',
@@ -138,8 +126,7 @@ export const discoverableGamesPool = [
     embedUrl: 'https://js13kgames.com/games/track-not-found/index.html',
     description: 'High-speed 3D sci-fi retro racer with WebGL track graphics and time-trial physics.',
     author: 'js13kGames (Verified Open Source)',
-    sourceUrl: 'https://js13kgames.com/entries/track-not-found',
-    verifiedStatus: 'DOUBLE-CHECKED OK'
+    sourceUrl: 'https://js13kgames.com/entries/track-not-found'
   },
   {
     id: 'space-huggers',
@@ -149,8 +136,7 @@ export const discoverableGamesPool = [
     embedUrl: 'https://js13kgames.com/games/space-huggers/index.html',
     description: 'Fast-paced open-source 2D pixel platform shooter with particle physics.',
     author: 'js13kGames (Verified Open Source)',
-    sourceUrl: 'https://js13kgames.com/entries/space-huggers',
-    verifiedStatus: 'DOUBLE-CHECKED OK'
+    sourceUrl: 'https://js13kgames.com/entries/space-huggers'
   },
   {
     id: 'native-pong',
@@ -159,8 +145,7 @@ export const discoverableGamesPool = [
     type: 'native-pong',
     description: 'High-speed 3D perspective cyber pong vs smart AI opponent rendered natively in canvas.',
     author: 'Cyber Wizard Native',
-    sourceUrl: 'Built-in',
-    verifiedStatus: 'DOUBLE-CHECKED NATIVE'
+    sourceUrl: 'Built-in'
   },
   {
     id: 'bounce-back',
@@ -170,8 +155,7 @@ export const discoverableGamesPool = [
     embedUrl: 'https://js13kgames.com/games/bounce-back/index.html',
     description: 'Isometric open-source action adventure game with boomerang combat mechanics.',
     author: 'js13kGames (Verified Open Source)',
-    sourceUrl: 'https://js13kgames.com/entries/bounce-back',
-    verifiedStatus: 'DOUBLE-CHECKED OK'
+    sourceUrl: 'https://js13kgames.com/entries/bounce-back'
   },
   {
     id: 'offline-runner',
@@ -181,8 +165,7 @@ export const discoverableGamesPool = [
     embedUrl: 'https://js13kgames.com/games/offline/index.html',
     description: 'Futuristic dystopian web runner with cyber neon obstacle matrix.',
     author: 'js13kGames (Verified Open Source)',
-    sourceUrl: 'https://js13kgames.com/entries/offline',
-    verifiedStatus: 'DOUBLE-CHECKED OK'
+    sourceUrl: 'https://js13kgames.com/entries/offline'
   }
 ];
 
@@ -209,28 +192,17 @@ function GameThumbnail({ game, isMostPlayed, playCount }) {
             <line x1="0" y1="110" x2="400" y2="110" stroke="#ec4899" strokeWidth="2" opacity="0.6" />
             <path d="M 0 200 L 200 110 L 400 200" fill="#0d1322" stroke="#00f3ff" strokeWidth="2" />
             <line x1="200" y1="110" x2="200" y2="200" stroke="#f59e0b" strokeWidth="3" strokeDasharray="8 8" />
-            <line x1="200" y1="110" x2="100" y2="200" stroke="rgba(168,85,247,0.5)" strokeWidth="1.5" />
-            <line x1="200" y1="110" x2="300" y2="200" stroke="rgba(168,85,247,0.5)" strokeWidth="1.5" />
             <rect x="175" y="160" width="50" height="25" rx="4" fill="#00f3ff" />
             <rect x="183" y="164" width="34" height="10" fill="#040711" />
-            <circle cx="182" cy="180" r="3" fill="#ec4899" />
-            <circle cx="218" cy="180" r="3" fill="#ec4899" />
           </svg>
         );
 
       case 'hexgl':
         return (
           <svg viewBox="0 0 400 200" style={{ width: '100%', height: '100%', display: 'block' }}>
-            <defs>
-              <linearGradient id="hexBg" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#0f172a" />
-                <stop offset="100%" stopColor="#1e1b4b" />
-              </linearGradient>
-            </defs>
-            <rect width="400" height="200" fill="url(#hexBg)" />
+            <rect width="400" height="200" fill="#0f172a" />
             <polygon points="200,30 260,65 260,135 200,170 140,135 140,65" fill="none" stroke="#00f3ff" strokeWidth="3.5" opacity="0.8" />
             <path d="M 120 160 L 200 70 L 280 160 Z" fill="rgba(168,85,247,0.35)" stroke="#a855f7" strokeWidth="2.5" />
-            <circle cx="200" cy="70" r="8" fill="#00f3ff" />
             <text x="200" y="190" textAnchor="middle" fill="#00f3ff" fontSize="13" fontWeight="800" letterSpacing="3">3D SCI-FI RACER</text>
           </svg>
         );
@@ -239,11 +211,9 @@ function GameThumbnail({ game, isMostPlayed, playCount }) {
         return (
           <svg viewBox="0 0 400 200" style={{ width: '100%', height: '100%', display: 'block' }}>
             <rect width="400" height="200" fill="#040914" />
-            <path d="M 0 50 H 400 M 0 100 H 400 M 0 150 H 400 M 100 0 V 200 M 200 0 V 200 M 300 0 V 200" stroke="rgba(0,243,255,0.08)" strokeWidth="1" />
             <rect x="90" y="80" width="35" height="35" fill="#00f3ff" rx="4" />
             <rect x="130" y="80" width="35" height="35" fill="rgba(0,243,255,0.75)" rx="4" />
             <rect x="170" y="80" width="35" height="35" fill="rgba(0,243,255,0.5)" rx="4" />
-            <rect x="170" y="120" width="35" height="35" fill="rgba(0,243,255,0.3)" rx="4" />
             <circle cx="280" cy="97" r="14" fill="#ec4899" />
             <text x="200" y="185" textAnchor="middle" fill="#ec4899" fontSize="13" fontWeight="800" letterSpacing="2">CYBER SNAKE ARCADE</text>
           </svg>
@@ -259,7 +229,6 @@ function GameThumbnail({ game, isMostPlayed, playCount }) {
             <rect x="270" y="30" width="60" height="18" rx="3" fill="#00f3ff" />
             <circle cx="210" cy="110" r="8" fill="#ffffff" />
             <rect x="160" y="165" width="80" height="12" rx="4" fill="#00f3ff" />
-            <text x="200" y="192" textAnchor="middle" fill="#10b981" fontSize="11" fontWeight="700" letterSpacing="2">NEON BREAKOUT</text>
           </svg>
         );
 
@@ -271,42 +240,6 @@ function GameThumbnail({ game, isMostPlayed, playCount }) {
             <rect x="30" y="70" width="12" height="60" rx="3" fill="#00f3ff" />
             <rect x="358" y="90" width="12" height="60" rx="3" fill="#ec4899" />
             <circle cx="150" cy="100" r="8" fill="#f59e0b" />
-            <text x="200" y="185" textAnchor="middle" fill="#00f3ff" fontSize="12" fontWeight="800" letterSpacing="2">CYBER 3D PONG</text>
-          </svg>
-        );
-
-      case 'track-not-found':
-        return (
-          <svg viewBox="0 0 400 200" style={{ width: '100%', height: '100%', display: 'block' }}>
-            <rect width="400" height="200" fill="#091428" />
-            <path d="M 50 180 L 150 70 L 250 70 L 350 180 Z" fill="#1e1b4b" stroke="#00f3ff" strokeWidth="2" />
-            <circle cx="200" cy="70" r="25" fill="#f59e0b" />
-            <text x="200" y="190" textAnchor="middle" fill="#00f3ff" fontSize="12" fontWeight="800" letterSpacing="2">3D TRACK RACER</text>
-          </svg>
-        );
-
-      case 'space-huggers':
-        return (
-          <svg viewBox="0 0 400 200" style={{ width: '100%', height: '100%', display: 'block' }}>
-            <rect width="400" height="200" fill="#0b0818" />
-            <rect x="50" y="140" width="100" height="30" rx="4" fill="#334155" />
-            <rect x="250" y="100" width="100" height="30" rx="4" fill="#334155" />
-            <circle cx="90" cy="125" r="12" fill="#00f3ff" />
-            <line x1="90" y1="125" x2="250" y2="115" stroke="#ec4899" strokeWidth="2" />
-            <text x="200" y="45" textAnchor="middle" fill="#ec4899" fontSize="13" fontWeight="800" letterSpacing="2">SPACE HUGGERS 2D</text>
-          </svg>
-        );
-
-      case '2048':
-        return (
-          <svg viewBox="0 0 400 200" style={{ width: '100%', height: '100%', display: 'block' }}>
-            <rect width="400" height="200" fill="#1e102a" />
-            <rect x="100" y="45" width="55" height="55" rx="6" fill="#f59e0b" />
-            <text x="127" y="80" textAnchor="middle" fill="#fff" fontSize="18" fontWeight="800">512</text>
-            <rect x="172" y="45" width="55" height="55" rx="6" fill="#ec4899" />
-            <text x="199" y="80" textAnchor="middle" fill="#fff" fontSize="18" fontWeight="800">1024</text>
-            <rect x="245" y="45" width="55" height="55" rx="6" fill="#00f3ff" />
-            <text x="272" y="80" textAnchor="middle" fill="#040914" fontSize="18" fontWeight="800">2048</text>
           </svg>
         );
 
@@ -316,7 +249,6 @@ function GameThumbnail({ game, isMostPlayed, playCount }) {
             <rect width="400" height="200" fill="#080e1e" />
             <circle cx="200" cy="100" r="45" fill="rgba(0,243,255,0.1)" stroke="#00f3ff" strokeWidth="2.5" />
             <path d="M 188 85 L 222 100 L 188 115 Z" fill="#00f3ff" />
-            <text x="200" y="175" textAnchor="middle" fill="#00f3ff" fontSize="11" fontWeight="700" letterSpacing="1.5">OPEN SOURCE GAME</text>
           </svg>
         );
     }
@@ -348,8 +280,7 @@ function GameThumbnail({ game, isMostPlayed, playCount }) {
           color: '#ffffff',
           display: 'flex',
           alignItems: 'center',
-          gap: '0.35rem',
-          letterSpacing: '0.5px'
+          gap: '0.35rem'
         }}>
           <Flame size={14} className="text-white animate-pulse" />
           <span>🔥 #1 MOST PLAYED</span>
@@ -387,14 +318,14 @@ function GameThumbnail({ game, isMostPlayed, playCount }) {
           color: game.type.startsWith('native') ? 'var(--cyan)' : '#10b981',
           border: game.type.startsWith('native') ? '1px solid var(--border-cyan)' : '1px solid #10b981'
         }}>
-          {game.type.startsWith('native') ? '⚡ NATIVE CANVAS' : '🌐 WEBGL'}
+          {game.type.startsWith('native') ? '⚡ NATIVE' : '🌐 WEBGL'}
         </span>
       </div>
     </div>
   );
 }
 
-// Built-in Native Cyber 3D Highway Racer Component
+// Built-in Mobile-Optimized Cyber 3D Highway Racer Component
 function NativeCyberRacer3D() {
   const canvasRef = useRef(null);
   const [speed, setSpeed] = useState(0);
@@ -404,6 +335,10 @@ function NativeCyberRacer3D() {
   });
   const [gameOver, setGameOver] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+
+  // Mobile Touch Control Refs
+  const steerRef = useRef(0); // -1 left, 1 right, 0 neutral
+  const accelRef = useRef(false);
 
   useEffect(() => {
     if (!gameStarted || gameOver) return;
@@ -431,16 +366,18 @@ function NativeCyberRacer3D() {
     ];
 
     const interval = setInterval(() => {
-      if (keys['ArrowUp'] || keys['KeyW']) {
+      // Accelerate via keyboard OR touch button
+      if (keys['ArrowUp'] || keys['KeyW'] || accelRef.current) {
         speedVal = Math.min(speedVal + 0.35, 15);
       } else {
         speedVal = Math.max(speedVal - 0.2, 0);
       }
 
-      if (keys['ArrowLeft'] || keys['KeyA']) {
+      // Steer via keyboard OR touch button
+      if (keys['ArrowLeft'] || keys['KeyA'] || steerRef.current === -1) {
         playerX = Math.max(playerX - 0.05, -0.9);
       }
-      if (keys['ArrowRight'] || keys['KeyD']) {
+      if (keys['ArrowRight'] || keys['KeyD'] || steerRef.current === 1) {
         playerX = Math.min(playerX + 0.05, 0.9);
       }
 
@@ -565,23 +502,28 @@ function NativeCyberRacer3D() {
   };
 
   return (
-    <div style={{ textAlign: 'center', padding: '1rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '1rem', fontSize: '1rem' }}>
+    <div style={{ textAlign: 'center', padding: '0.5rem', width: '100%', maxWidth: '580px', margin: '0 auto' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '1.25rem', marginBottom: '0.75rem', fontSize: '0.9rem', flexWrap: 'wrap' }}>
         <div>Speed: <strong className="text-cyan">{speed} km/h</strong></div>
         <div>Distance: <strong className="text-green">{distance} m</strong></div>
         <div>High Score: <strong className="text-purple">{highScore} m</strong></div>
       </div>
 
-      <div style={{ position: 'relative', display: 'inline-block' }}>
+      <div style={{ position: 'relative', width: '100%', display: 'inline-block' }}>
         <canvas 
           ref={canvasRef} 
           width={540} 
           height={400}
           style={{ 
+            width: '100%',
+            height: 'auto',
+            maxHeight: '65vh',
+            aspectRatio: '540 / 400',
             background: '#060913', 
             border: '2px solid var(--border-cyan)', 
             borderRadius: 'var(--radius-md)',
-            boxShadow: '0 0 25px var(--cyan-glow)'
+            boxShadow: '0 0 25px var(--cyan-glow)',
+            touchAction: 'none'
           }}
         />
 
@@ -589,19 +531,19 @@ function NativeCyberRacer3D() {
           <div style={{
             position: 'absolute',
             inset: 0,
-            background: 'rgba(6, 9, 19, 0.88)',
+            background: 'rgba(6, 9, 19, 0.92)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justify: 'center',
             borderRadius: 'var(--radius-md)',
-            padding: '1.5rem'
+            padding: '1.25rem'
           }}>
-            <h4 style={{ fontSize: '1.6rem', fontWeight: 800, marginBottom: '0.5rem' }}>
+            <h4 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.5rem' }}>
               {gameOver ? '💥 Crash! Game Over' : '🏎️ Cyber 3D Highway Racer'}
             </h4>
-            <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: '1.25rem', maxWidth: '360px' }}>
-              Hold <strong>W / Up Arrow</strong> to accelerate. Use <strong>A / D / Left / Right Arrows</strong> to steer and dodge traffic!
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1.25rem', maxWidth: '340px' }}>
+              Use <strong>Keyboard WASD / Arrows</strong> or the <strong>Mobile Touch Controls</strong> below!
             </p>
             <button className="btn btn-primary" onClick={startGame}>
               <Play size={16} />
@@ -610,11 +552,60 @@ function NativeCyberRacer3D() {
           </div>
         )}
       </div>
+
+      {/* MOBILE ON-SCREEN TOUCH CONTROLLERS */}
+      {gameStarted && !gameOver && (
+        <div style={{
+          marginTop: '1rem',
+          display: 'flex',
+          justify: 'space-between',
+          alignItems: 'center',
+          gap: '0.75rem',
+          userSelect: 'none',
+          touchAction: 'none'
+        }}>
+          <button 
+            className="btn btn-secondary" 
+            style={{ flex: 1, height: '52px', justifyContent: 'center', fontSize: '1rem', fontWeight: 800 }}
+            onTouchStart={() => { steerRef.current = -1; }}
+            onTouchEnd={() => { steerRef.current = 0; }}
+            onMouseDown={() => { steerRef.current = -1; }}
+            onMouseUp={() => { steerRef.current = 0; }}
+          >
+            <ArrowLeftIcon size={20} />
+            <span>LEFT</span>
+          </button>
+
+          <button 
+            className="btn btn-primary" 
+            style={{ flex: 1.2, height: '52px', justifyContent: 'center', fontSize: '1rem', fontWeight: 800 }}
+            onTouchStart={() => { accelRef.current = true; }}
+            onTouchEnd={() => { accelRef.current = false; }}
+            onMouseDown={() => { accelRef.current = true; }}
+            onMouseUp={() => { accelRef.current = false; }}
+          >
+            <Zap size={20} />
+            <span>ACCEL</span>
+          </button>
+
+          <button 
+            className="btn btn-secondary" 
+            style={{ flex: 1, height: '52px', justifyContent: 'center', fontSize: '1rem', fontWeight: 800 }}
+            onTouchStart={() => { steerRef.current = 1; }}
+            onTouchEnd={() => { steerRef.current = 0; }}
+            onMouseDown={() => { steerRef.current = 1; }}
+            onMouseUp={() => { steerRef.current = 0; }}
+          >
+            <span>RIGHT</span>
+            <ArrowRightIcon size={20} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
 
-// Built-in Native Cyber Snake Game Component
+// Built-in Mobile-Optimized Cyber Snake Game Component
 function NativeCyberSnake() {
   const canvasRef = useRef(null);
   const [score, setScore] = useState(0);
@@ -623,6 +614,14 @@ function NativeCyberSnake() {
   });
   const [gameOver, setGameOver] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+
+  const directionRef = useRef({ dx: 0, dy: -1 });
+
+  const setSnakeDirection = (newDx, newDy) => {
+    const { dx, dy } = directionRef.current;
+    if (newDx !== 0 && dx === 0) { directionRef.current = { dx: newDx, dy: 0 }; }
+    if (newDy !== 0 && dy === 0) { directionRef.current = { dx: 0, dy: newDy }; }
+  };
 
   useEffect(() => {
     if (!gameStarted || gameOver) return;
@@ -635,8 +634,7 @@ function NativeCyberSnake() {
     const tileCount = 20;
     let snake = [{ x: 10, y: 10 }, { x: 10, y: 11 }, { x: 10, y: 12 }];
     let food = { x: 5, y: 5 };
-    let dx = 0;
-    let dy = -1;
+    directionRef.current = { dx: 0, dy: -1 };
     let currentScore = 0;
 
     function placeFood() {
@@ -647,15 +645,45 @@ function NativeCyberSnake() {
     }
 
     function handleKeyDown(e) {
-      if (['ArrowUp', 'KeyW'].includes(e.code) && dy === 0) { dx = 0; dy = -1; }
-      else if (['ArrowDown', 'KeyS'].includes(e.code) && dy === 0) { dx = 0; dy = 1; }
-      else if (['ArrowLeft', 'KeyA'].includes(e.code) && dx === 0) { dx = -1; dy = 0; }
-      else if (['ArrowRight', 'KeyD'].includes(e.code) && dx === 0) { dx = 1; dy = 0; }
+      if (['ArrowUp', 'KeyW'].includes(e.code)) setSnakeDirection(0, -1);
+      else if (['ArrowDown', 'KeyS'].includes(e.code)) setSnakeDirection(0, 1);
+      else if (['ArrowLeft', 'KeyA'].includes(e.code)) setSnakeDirection(-1, 0);
+      else if (['ArrowRight', 'KeyD'].includes(e.code)) setSnakeDirection(1, 0);
     }
 
     window.addEventListener('keydown', handleKeyDown);
 
+    // Touch Swipe Gesture Detection
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    function handleTouchStart(e) {
+      if (e.touches && e.touches[0]) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }
+    }
+
+    function handleTouchEnd(e) {
+      if (e.changedTouches && e.changedTouches[0]) {
+        const deltaX = e.changedTouches[0].clientX - touchStartX;
+        const deltaY = e.changedTouches[0].clientY - touchStartY;
+
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+          if (deltaX > 30) setSnakeDirection(1, 0);
+          else if (deltaX < -30) setSnakeDirection(-1, 0);
+        } else {
+          if (deltaY > 30) setSnakeDirection(0, 1);
+          else if (deltaY < -30) setSnakeDirection(0, -1);
+        }
+      }
+    }
+
+    canvas.addEventListener('touchstart', handleTouchStart, { passive: true });
+    canvas.addEventListener('touchend', handleTouchEnd, { passive: true });
+
     const interval = setInterval(() => {
+      const { dx, dy } = directionRef.current;
       const head = { x: snake[0].x + dx, y: snake[0].y + dy };
 
       if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
@@ -725,6 +753,8 @@ function NativeCyberSnake() {
     return () => {
       clearInterval(interval);
       window.removeEventListener('keydown', handleKeyDown);
+      canvas.removeEventListener('touchstart', handleTouchStart);
+      canvas.removeEventListener('touchend', handleTouchEnd);
     };
   }, [gameStarted, gameOver, highScore]);
 
@@ -735,22 +765,27 @@ function NativeCyberSnake() {
   };
 
   return (
-    <div style={{ textAlign: 'center', padding: '1rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '1rem', fontSize: '1rem' }}>
+    <div style={{ textAlign: 'center', padding: '0.5rem', width: '100%', maxWidth: '440px', margin: '0 auto' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '0.75rem', fontSize: '0.95rem' }}>
         <div>Score: <strong className="text-cyan">{score}</strong></div>
         <div>High Score: <strong className="text-purple">{highScore}</strong></div>
       </div>
 
-      <div style={{ position: 'relative', display: 'inline-block' }}>
+      <div style={{ position: 'relative', width: '100%', display: 'inline-block' }}>
         <canvas 
           ref={canvasRef} 
           width={400} 
           height={400}
           style={{ 
+            width: '100%',
+            height: 'auto',
+            maxHeight: '65vh',
+            aspectRatio: '400 / 400',
             background: '#060913', 
             border: '2px solid var(--border-cyan)', 
             borderRadius: 'var(--radius-md)',
-            boxShadow: '0 0 25px var(--cyan-glow)'
+            boxShadow: '0 0 25px var(--cyan-glow)',
+            touchAction: 'none'
           }}
         />
 
@@ -758,19 +793,19 @@ function NativeCyberSnake() {
           <div style={{
             position: 'absolute',
             inset: 0,
-            background: 'rgba(6, 9, 19, 0.88)',
+            background: 'rgba(6, 9, 19, 0.92)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justify: 'center',
             borderRadius: 'var(--radius-md)',
-            padding: '1.5rem'
+            padding: '1.25rem'
           }}>
-            <h4 style={{ fontSize: '1.6rem', fontWeight: 800, marginBottom: '0.5rem' }}>
+            <h4 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.5rem' }}>
               {gameOver ? '💥 Game Over!' : '🐍 Cyber Snake Arcade'}
             </h4>
-            <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: '1.25rem', maxWidth: '300px' }}>
-              Use Arrow Keys or W-A-S-D to control the snake
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1.25rem', maxWidth: '300px' }}>
+              Swipe on canvas, use keyboard arrows, or use the touch D-Pad below!
             </p>
             <button className="btn btn-primary" onClick={startGame}>
               <Play size={16} />
@@ -779,11 +814,58 @@ function NativeCyberSnake() {
           </div>
         )}
       </div>
+
+      {/* MOBILE TOUCH D-PAD CONTROLLER */}
+      {gameStarted && !gameOver && (
+        <div style={{
+          marginTop: '1rem',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '0.4rem',
+          userSelect: 'none',
+          touchAction: 'none'
+        }}>
+          <button 
+            className="btn btn-secondary btn-sm" 
+            style={{ width: '80px', height: '42px', justifyContent: 'center' }}
+            onClick={() => setSnakeDirection(0, -1)}
+          >
+            <ArrowUp size={20} />
+          </button>
+
+          <div style={{ display: 'flex', gap: '1.5rem' }}>
+            <button 
+              className="btn btn-secondary btn-sm" 
+              style={{ width: '80px', height: '42px', justifyContent: 'center' }}
+              onClick={() => setSnakeDirection(-1, 0)}
+            >
+              <ArrowLeftIcon size={20} />
+            </button>
+
+            <button 
+              className="btn btn-secondary btn-sm" 
+              style={{ width: '80px', height: '42px', justifyContent: 'center' }}
+              onClick={() => setSnakeDirection(1, 0)}
+            >
+              <ArrowRightIcon size={20} />
+            </button>
+          </div>
+
+          <button 
+            className="btn btn-secondary btn-sm" 
+            style={{ width: '80px', height: '42px', justifyContent: 'center' }}
+            onClick={() => setSnakeDirection(0, 1)}
+          >
+            <ArrowDown size={20} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
 
-// Built-in Native Cyber Neon Breakout Game Component
+// Built-in Mobile-Optimized Cyber Neon Breakout Game Component
 function NativeCyberBreakout() {
   const canvasRef = useRef(null);
   const [score, setScore] = useState(0);
@@ -792,6 +874,8 @@ function NativeCyberBreakout() {
   });
   const [gameOver, setGameOver] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+
+  const paddleRef = useRef(220); // paddle position
 
   useEffect(() => {
     if (!gameStarted || gameOver) return;
@@ -805,7 +889,7 @@ function NativeCyberBreakout() {
 
     let paddleWidth = 100;
     let paddleHeight = 14;
-    let paddleX = (width - paddleWidth) / 2;
+    paddleRef.current = (width - paddleWidth) / 2;
 
     let ballX = width / 2;
     let ballY = height - 40;
@@ -833,13 +917,27 @@ function NativeCyberBreakout() {
 
     function handleMouseMove(e) {
       const rect = canvas.getBoundingClientRect();
-      const relativeX = e.clientX - rect.left;
+      const scale = canvas.width / rect.width;
+      const relativeX = (e.clientX - rect.left) * scale;
       if (relativeX > 0 && relativeX < width) {
-        paddleX = relativeX - paddleWidth / 2;
+        paddleRef.current = relativeX - paddleWidth / 2;
+      }
+    }
+
+    function handleTouchMove(e) {
+      if (e.touches && e.touches[0]) {
+        const rect = canvas.getBoundingClientRect();
+        const scale = canvas.width / rect.width;
+        const relativeX = (e.touches[0].clientX - rect.left) * scale;
+        if (relativeX > 0 && relativeX < width) {
+          paddleRef.current = relativeX - paddleWidth / 2;
+        }
       }
     }
 
     canvas.addEventListener('mousemove', handleMouseMove);
+    canvas.addEventListener('touchmove', handleTouchMove, { passive: true });
+    canvas.addEventListener('touchstart', handleTouchMove, { passive: true });
 
     const interval = setInterval(() => {
       ctx.fillStyle = '#060913';
@@ -862,10 +960,11 @@ function NativeCyberBreakout() {
       }
 
       // Draw Paddle
+      const pX = paddleRef.current;
       ctx.fillStyle = '#00f3ff';
       ctx.shadowColor = '#00f3ff';
       ctx.shadowBlur = 10;
-      ctx.fillRect(paddleX, height - paddleHeight - 10, paddleWidth, paddleHeight);
+      ctx.fillRect(pX, height - paddleHeight - 10, paddleWidth, paddleHeight);
       ctx.shadowBlur = 0;
 
       // Draw Ball
@@ -900,7 +999,7 @@ function NativeCyberBreakout() {
       if (ballY + dy < ballRadius) {
         dy = -dy;
       } else if (ballY + dy > height - paddleHeight - 15) {
-        if (ballX > paddleX && ballX < paddleX + paddleWidth) {
+        if (ballX > pX && ballX < pX + paddleWidth) {
           dy = -dy;
         } else if (ballY + dy > height - ballRadius) {
           setGameOver(true);
@@ -915,6 +1014,8 @@ function NativeCyberBreakout() {
     return () => {
       clearInterval(interval);
       canvas.removeEventListener('mousemove', handleMouseMove);
+      canvas.removeEventListener('touchmove', handleTouchMove);
+      canvas.removeEventListener('touchstart', handleTouchMove);
     };
   }, [gameStarted, gameOver, highScore]);
 
@@ -924,23 +1025,32 @@ function NativeCyberBreakout() {
     setGameStarted(true);
   };
 
+  const movePaddleTouch = (dir) => {
+    paddleRef.current = Math.max(0, Math.min(440, paddleRef.current + dir * 40));
+  };
+
   return (
-    <div style={{ textAlign: 'center', padding: '1rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '1rem', fontSize: '1rem' }}>
+    <div style={{ textAlign: 'center', padding: '0.5rem', width: '100%', maxWidth: '580px', margin: '0 auto' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '0.75rem', fontSize: '0.95rem' }}>
         <div>Score: <strong className="text-cyan">{score}</strong></div>
         <div>High Score: <strong className="text-purple">{highScore}</strong></div>
       </div>
 
-      <div style={{ position: 'relative', display: 'inline-block' }}>
+      <div style={{ position: 'relative', width: '100%', display: 'inline-block' }}>
         <canvas 
           ref={canvasRef} 
           width={540} 
           height={400}
           style={{ 
+            width: '100%',
+            height: 'auto',
+            maxHeight: '65vh',
+            aspectRatio: '540 / 400',
             background: '#060913', 
             border: '2px solid var(--border-cyan)', 
             borderRadius: 'var(--radius-md)',
-            boxShadow: '0 0 25px var(--cyan-glow)'
+            boxShadow: '0 0 25px var(--cyan-glow)',
+            touchAction: 'none'
           }}
         />
 
@@ -948,19 +1058,19 @@ function NativeCyberBreakout() {
           <div style={{
             position: 'absolute',
             inset: 0,
-            background: 'rgba(6, 9, 19, 0.88)',
+            background: 'rgba(6, 9, 19, 0.92)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justify: 'center',
             borderRadius: 'var(--radius-md)',
-            padding: '1.5rem'
+            padding: '1.25rem'
           }}>
-            <h4 style={{ fontSize: '1.6rem', fontWeight: 800, marginBottom: '0.5rem' }}>
+            <h4 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.5rem' }}>
               {gameOver ? '💥 Bricks Won!' : '🧱 Cyber Neon Breakout'}
             </h4>
-            <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: '1.25rem', maxWidth: '340px' }}>
-              Move mouse left and right over canvas to control the laser paddle!
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1.25rem', maxWidth: '340px' }}>
+              Drag finger over canvas, move mouse, or use touch buttons to guide the laser paddle!
             </p>
             <button className="btn btn-primary" onClick={startGame}>
               <Play size={16} />
@@ -969,17 +1079,49 @@ function NativeCyberBreakout() {
           </div>
         )}
       </div>
+
+      {/* MOBILE PADDLE CONTROLS */}
+      {gameStarted && !gameOver && (
+        <div style={{
+          marginTop: '1rem',
+          display: 'flex',
+          justify: 'space-between',
+          gap: '1rem',
+          userSelect: 'none',
+          touchAction: 'none'
+        }}>
+          <button 
+            className="btn btn-secondary" 
+            style={{ flex: 1, height: '48px', justifyContent: 'center', fontSize: '0.95rem' }}
+            onClick={() => movePaddleTouch(-1)}
+          >
+            <ArrowLeftIcon size={18} />
+            <span>PADDLE LEFT</span>
+          </button>
+
+          <button 
+            className="btn btn-secondary" 
+            style={{ flex: 1, height: '48px', justifyContent: 'center', fontSize: '0.95rem' }}
+            onClick={() => movePaddleTouch(1)}
+          >
+            <span>PADDLE RIGHT</span>
+            <ArrowRightIcon size={18} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
 
-// Built-in Native Cyber 3D Neon Pong Game Component
+// Built-in Mobile-Optimized Cyber 3D Neon Pong Game Component
 function NativeCyberPong() {
   const canvasRef = useRef(null);
   const [playerScore, setPlayerScore] = useState(0);
   const [aiScore, setAiScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+
+  const paddleRef = useRef(165); // Player paddle Y position
 
   useEffect(() => {
     if (!gameStarted || gameOver) return;
@@ -994,7 +1136,7 @@ function NativeCyberPong() {
     let paddleH = 70;
     let paddleW = 12;
 
-    let playerY = (height - paddleH) / 2;
+    paddleRef.current = (height - paddleH) / 2;
     let aiY = (height - paddleH) / 2;
 
     let ballX = width / 2;
@@ -1004,15 +1146,31 @@ function NativeCyberPong() {
 
     function handleMouseMove(e) {
       const rect = canvas.getBoundingClientRect();
-      const relativeY = e.clientY - rect.top;
+      const scale = canvas.height / rect.height;
+      const relativeY = (e.clientY - rect.top) * scale;
       if (relativeY > 0 && relativeY < height) {
-        playerY = relativeY - paddleH / 2;
+        paddleRef.current = relativeY - paddleH / 2;
+      }
+    }
+
+    function handleTouchMove(e) {
+      if (e.touches && e.touches[0]) {
+        const rect = canvas.getBoundingClientRect();
+        const scale = canvas.height / rect.height;
+        const relativeY = (e.touches[0].clientY - rect.top) * scale;
+        if (relativeY > 0 && relativeY < height) {
+          paddleRef.current = relativeY - paddleH / 2;
+        }
       }
     }
 
     canvas.addEventListener('mousemove', handleMouseMove);
+    canvas.addEventListener('touchmove', handleTouchMove, { passive: true });
+    canvas.addEventListener('touchstart', handleTouchMove, { passive: true });
 
     const interval = setInterval(() => {
+      const playerY = paddleRef.current;
+
       // AI Tracking
       const aiCenter = aiY + paddleH / 2;
       if (aiCenter < ballY - 15) {
@@ -1083,6 +1241,8 @@ function NativeCyberPong() {
     return () => {
       clearInterval(interval);
       canvas.removeEventListener('mousemove', handleMouseMove);
+      canvas.removeEventListener('touchmove', handleTouchMove);
+      canvas.removeEventListener('touchstart', handleTouchMove);
     };
   }, [gameStarted, gameOver]);
 
@@ -1093,23 +1253,32 @@ function NativeCyberPong() {
     setGameStarted(true);
   };
 
+  const movePaddleTouch = (dir) => {
+    paddleRef.current = Math.max(0, Math.min(330, paddleRef.current + dir * 35));
+  };
+
   return (
-    <div style={{ textAlign: 'center', padding: '1rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '3rem', marginBottom: '1rem', fontSize: '1.1rem' }}>
+    <div style={{ textAlign: 'center', padding: '0.5rem', width: '100%', maxWidth: '580px', margin: '0 auto' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '3rem', marginBottom: '0.75rem', fontSize: '1rem' }}>
         <div>Player: <strong className="text-cyan">{playerScore}</strong></div>
         <div>Cyber AI: <strong className="text-pink">{aiScore}</strong></div>
       </div>
 
-      <div style={{ position: 'relative', display: 'inline-block' }}>
+      <div style={{ position: 'relative', width: '100%', display: 'inline-block' }}>
         <canvas 
           ref={canvasRef} 
           width={540} 
           height={400}
           style={{ 
+            width: '100%',
+            height: 'auto',
+            maxHeight: '65vh',
+            aspectRatio: '540 / 400',
             background: '#060913', 
             border: '2px solid var(--border-cyan)', 
             borderRadius: 'var(--radius-md)',
-            boxShadow: '0 0 25px var(--cyan-glow)'
+            boxShadow: '0 0 25px var(--cyan-glow)',
+            touchAction: 'none'
           }}
         />
 
@@ -1117,19 +1286,19 @@ function NativeCyberPong() {
           <div style={{
             position: 'absolute',
             inset: 0,
-            background: 'rgba(6, 9, 19, 0.88)',
+            background: 'rgba(6, 9, 19, 0.92)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justify: 'center',
             borderRadius: 'var(--radius-md)',
-            padding: '1.5rem'
+            padding: '1.25rem'
           }}>
-            <h4 style={{ fontSize: '1.6rem', fontWeight: 800, marginBottom: '0.5rem' }}>
+            <h4 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.5rem' }}>
               🏓 Cyber 3D Neon Pong
             </h4>
-            <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: '1.25rem', maxWidth: '340px' }}>
-              Move mouse vertically over canvas to control left paddle against Cyber AI!
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1.25rem', maxWidth: '340px' }}>
+              Drag finger vertically on canvas, move mouse, or use touch buttons to control paddle!
             </p>
             <button className="btn btn-primary" onClick={startGame}>
               <Play size={16} />
@@ -1138,6 +1307,36 @@ function NativeCyberPong() {
           </div>
         )}
       </div>
+
+      {/* MOBILE PADDLE UP/DOWN CONTROLS */}
+      {gameStarted && (
+        <div style={{
+          marginTop: '1rem',
+          display: 'flex',
+          justify: 'space-between',
+          gap: '1rem',
+          userSelect: 'none',
+          touchAction: 'none'
+        }}>
+          <button 
+            className="btn btn-secondary" 
+            style={{ flex: 1, height: '48px', justifyContent: 'center', fontSize: '0.95rem' }}
+            onClick={() => movePaddleTouch(-1)}
+          >
+            <ArrowUp size={18} />
+            <span>PADDLE UP</span>
+          </button>
+
+          <button 
+            className="btn btn-secondary" 
+            style={{ flex: 1, height: '48px', justifyContent: 'center', fontSize: '0.95rem' }}
+            onClick={() => movePaddleTouch(1)}
+          >
+            <span>PADDLE DOWN</span>
+            <ArrowDown size={18} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -1178,7 +1377,7 @@ export default function WebGames() {
 
   const stageContainerRef = useRef(null);
 
-  // Silent Background Auto-Discovery Loop (No Telemetry Box Rendered)
+  // Silent Background Auto-Discovery Loop
   useEffect(() => {
     const timer = setInterval(() => {
       setPool(prevPool => {
@@ -1187,8 +1386,7 @@ export default function WebGames() {
           const remainingPool = prevPool.slice(1);
           const autoDiscoveredGame = { 
             ...nextGame, 
-            isAutoDiscovered: true,
-            verifiedStatus: nextGame.verifiedStatus || 'HTTP 200 VERIFIED'
+            isAutoDiscovered: true
           };
           setGames(prevGames => [autoDiscoveredGame, ...prevGames]);
           return remainingPool;
@@ -1218,7 +1416,6 @@ export default function WebGames() {
   });
 
   const handleSelectGame = (game) => {
-    // Increment play count & save to localStorage
     const updatedCounts = {
       ...playCounts,
       [game.id]: (playCounts[game.id] || 0) + 1
@@ -1264,12 +1461,12 @@ export default function WebGames() {
   }, []);
 
   return (
-    <section style={{ maxWidth: '1280px', margin: '0 auto' }}>
+    <section style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 0.5rem' }}>
       {/* High-Octane Gaming Banner Header */}
       <div 
         className="glass-card" 
         style={{ 
-          padding: '1.75rem 2rem', 
+          padding: '1.5rem 1.5rem', 
           marginBottom: '1.5rem',
           background: 'linear-gradient(135deg, rgba(13,20,38,0.9), rgba(15,9,30,0.9))',
           border: '1px solid var(--border-cyan)',
@@ -1287,33 +1484,37 @@ export default function WebGames() {
           background: 'linear-gradient(90deg, var(--cyan), var(--purple), var(--pink))'
         }} />
 
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1.25rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
               <span className="badge badge-cyan" style={{ padding: '0.35rem 0.85rem' }}>
                 <Flame size={14} className="text-pink" />
                 <span>ELECTRO GAMING ARCADE</span>
               </span>
+              <span className="badge badge-purple" style={{ padding: '0.35rem 0.85rem' }}>
+                <Smartphone size={14} className="text-cyan" />
+                <span>MOBILE TOUCH READY</span>
+              </span>
             </div>
-            <h2 style={{ fontSize: '2.2rem', fontWeight: 800, letterSpacing: '-0.5px' }}>
+            <h2 style={{ fontSize: '1.8rem', fontWeight: 800, letterSpacing: '-0.5px' }}>
               {selectedGame ? selectedGame.title : <>Open-Source <span className="text-cyan glow-cyan">3D & Arcade Games</span></>}
             </h2>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginTop: '0.25rem' }}>
-              High-performance WebGL 3D racers, retro arcade classics, space shooters, sorted dynamically by popularity.
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '0.2rem' }}>
+              Optimized for mobile touchscreens & desktop keyboards. Most played games sorted on top.
             </p>
           </div>
 
-          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', flexWrap: 'wrap' }}>
             {selectedGame && (
-              <button className="btn btn-outline" onClick={() => setSelectedGame(null)}>
-                <ArrowLeft size={16} />
+              <button className="btn btn-outline btn-sm" onClick={() => setSelectedGame(null)}>
+                <ArrowLeft size={15} />
                 <span>Back to Catalog</span>
               </button>
             )}
 
-            <button className="btn btn-primary" onClick={handleRandomGame}>
-              <Shuffle size={16} />
-              <span>🎲 Surprise Me (Random Game)</span>
+            <button className="btn btn-primary btn-sm" onClick={handleRandomGame}>
+              <Shuffle size={15} />
+              <span>Surprise Me 🎲</span>
             </button>
           </div>
         </div>
@@ -1323,16 +1524,16 @@ export default function WebGames() {
       {!selectedGame ? (
         <div>
           {/* Controls Bar: Categories & Search */}
-          <div style={{ marginBottom: '2rem' }}>
+          <div style={{ marginBottom: '1.5rem' }}>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center', justifyContent: 'space-between' }}>
               
               {/* Category Pills */}
-              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
                 {gameCategories.map((cat) => (
                   <button
                     key={cat.id}
                     onClick={() => setSelectedCategory(cat.id)}
-                    className={`btn ${selectedCategory === cat.id ? 'btn-primary' : 'btn-outline'}`}
+                    className={`btn btn-sm ${selectedCategory === cat.id ? 'btn-primary' : 'btn-outline'}`}
                   >
                     <span>{cat.label}</span>
                   </button>
@@ -1340,7 +1541,7 @@ export default function WebGames() {
               </div>
 
               {/* Search Box */}
-              <div style={{ minWidth: '240px', maxWidth: '300px', width: '100%' }}>
+              <div style={{ minWidth: '220px', maxWidth: '300px', width: '100%' }}>
                 <div className="search-box">
                   <Search className="search-icon" size={16} />
                   <input 
@@ -1386,26 +1587,26 @@ export default function WebGames() {
                       playCount={count} 
                     />
 
-                    <div style={{ padding: '1.25rem' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                    <div style={{ padding: '1.15rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
                         <span className="badge badge-purple" style={{ fontSize: '0.72rem' }}>{game.category}</span>
                         <span className="badge badge-cyan" style={{ fontSize: '0.72rem' }}>
                           {game.type.startsWith('native') ? 'NATIVE CANVAS' : 'WEBGL 3D'}
                         </span>
                       </div>
 
-                      <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '0.4rem', color: 'var(--text-main)' }}>
+                      <h3 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: '0.35rem', color: 'var(--text-main)' }}>
                         {game.title}
                       </h3>
 
-                      <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '1rem' }}>
+                      <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '0.85rem' }}>
                         {game.description}
                       </p>
                     </div>
                   </div>
 
-                  <div style={{ padding: '0 1.25rem 1.25rem 1.25rem' }}>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)', marginBottom: '0.85rem' }}>
+                  <div style={{ padding: '0 1.15rem 1.15rem 1.15rem' }}>
+                    <div style={{ fontSize: '0.78rem', color: 'var(--text-dim)', marginBottom: '0.75rem' }}>
                       Developer: <strong className="text-cyan">{game.author}</strong>
                     </div>
 
@@ -1426,7 +1627,7 @@ export default function WebGames() {
             ref={stageContainerRef}
             className="glass-card"
             style={{
-              padding: isFullscreen ? 0 : '1.25rem',
+              padding: isFullscreen ? 0 : '1rem',
               marginBottom: '1.5rem',
               position: isFullscreen ? 'fixed' : 'relative',
               top: isFullscreen ? 0 : 'auto',
@@ -1443,19 +1644,19 @@ export default function WebGames() {
           >
             {/* Stage Header */}
             {!isFullscreen && (
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.75rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem', flexWrap: 'wrap', gap: '0.6rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                   <button className="btn btn-outline btn-sm" onClick={() => setSelectedGame(null)}>
                     <ArrowLeft size={15} />
                     <span>Back to Catalog</span>
                   </button>
                   <div>
-                    <span className="badge badge-purple" style={{ fontSize: '0.75rem' }}>{selectedGame.category}</span>
-                    <h3 style={{ fontSize: '1.2rem', fontWeight: 800, display: 'inline', marginLeft: '0.5rem' }}>{selectedGame.title}</h3>
+                    <span className="badge badge-purple" style={{ fontSize: '0.72rem' }}>{selectedGame.category}</span>
+                    <h3 style={{ fontSize: '1.1rem', fontWeight: 800, display: 'inline', marginLeft: '0.4rem' }}>{selectedGame.title}</h3>
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
                   <button className="btn btn-primary btn-sm" onClick={toggleFullscreen} title="Enter True Fullscreen Mode">
                     <Maximize2 size={15} />
                     <span>True Fullscreen</span>
@@ -1501,7 +1702,7 @@ export default function WebGames() {
             {/* Main Game Stage Render Frame */}
             <div style={{
               width: '100%',
-              height: isFullscreen ? '100vh' : '580px',
+              height: isFullscreen ? '100vh' : 'min(580px, 75vh)',
               background: '#000',
               borderRadius: isFullscreen ? 0 : 'var(--radius-sm)',
               overflow: 'hidden',
@@ -1536,7 +1737,7 @@ export default function WebGames() {
 
             {/* Stage Footer */}
             {!isFullscreen && (
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem', flexWrap: 'wrap', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.85rem', flexWrap: 'wrap', gap: '0.5rem', fontSize: '0.82rem', color: 'var(--text-muted)' }}>
                 <div>{selectedGame.description}</div>
                 <div>
                   Developer: <strong className="text-cyan">{selectedGame.author}</strong>
@@ -1546,7 +1747,7 @@ export default function WebGames() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-purple"
-                      style={{ marginLeft: '1rem', textDecoration: 'underline' }}
+                      style={{ marginLeft: '0.75rem', textDecoration: 'underline' }}
                     >
                       Direct Launch Link
                     </a>
