@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://cyberwizard.vercel.app/sitemap.xml
+Sitemap: https://cyber-wizard.in/sitemap.xml
