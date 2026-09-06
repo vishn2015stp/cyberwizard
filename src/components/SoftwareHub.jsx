@@ -146,7 +146,7 @@ export default function SoftwareHub() {
                       style={{ flex: 1, justifyContent: 'center' }}
                     >
                       <Download size={15} />
-                      <span>Official Download</span>
+                      <span>{item.downloadLabel || 'Official Download'}</span>
                     </a>
                     <a 
                       href={item.officialSite}

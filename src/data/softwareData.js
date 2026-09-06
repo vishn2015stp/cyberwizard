@@ -147,6 +147,7 @@ export const softwareList = [
     os: ['Windows'],
     license: 'Freeware',
     version: 'Latest',
+    downloadLabel: 'Download',
     downloadUrl: 'https://pub-d632552c2d9a4309aaed9169082eabae.r2.dev/MalayalamTypingTools.rar',
     officialSite: 'https://pub-d632552c2d9a4309aaed9169082eabae.r2.dev/MalayalamTypingTools.rar'
   }
