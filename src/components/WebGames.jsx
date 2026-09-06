@@ -8,10 +8,47 @@ import {
   ExternalLink, 
   Sparkles,
   Zap,
-  Info
+  Car
 } from 'lucide-react';
 
+export const gameCategories = [
+  { id: 'all', label: 'All Games' },
+  { id: '3D Racing', label: '🏎️ 3D Racing' },
+  { id: 'Retro Arcade', label: '🕹️ Retro Arcade' },
+  { id: 'Puzzle & Logic', label: '🧩 Puzzle & Logic' }
+];
+
 export const gamesList = [
+  {
+    id: 'hexgl',
+    title: 'HexGL 3D Sci-Fi Racer',
+    category: '3D Racing',
+    type: 'iframe',
+    embedUrl: 'https://hexgl.bkcore.com/play/',
+    description: 'High-speed futuristic 3D sci-fi hovercraft racing game built with Three.js & WebGL.',
+    author: 'Thibaut Despoulain (BKcore)',
+    sourceUrl: 'https://github.com/bkcore/HexGL'
+  },
+  {
+    id: 'slowroads',
+    title: 'Slow Roads 3D Driving',
+    category: '3D Racing',
+    type: 'iframe',
+    embedUrl: 'https://slowroads.io/',
+    description: 'Procedurally generated 3D endless driving game with smooth WebGL graphics and scenic tracks.',
+    author: 'Anslo',
+    sourceUrl: 'https://slowroads.io/'
+  },
+  {
+    id: '3d-racer',
+    title: '3D WebGL Highway Racer',
+    category: '3D Racing',
+    type: 'iframe',
+    embedUrl: 'https://submariner.github.io/3d-racing/',
+    description: 'Fast 3D arcade highway racer rendered using Three.js & WebGL canvas.',
+    author: 'Submariner Open Source',
+    sourceUrl: 'https://github.com/submariner/3d-racing'
+  },
   {
     id: 'snake',
     title: 'Cyber Snake Arcade',
@@ -24,7 +61,7 @@ export const gamesList = [
   {
     id: 'hextris',
     title: 'Hextris (Hexagonal Puzzle)',
-    category: 'Puzzle & Reflex',
+    category: 'Puzzle & Logic',
     type: 'iframe',
     embedUrl: 'https://hextris.github.io/hextris/',
     description: 'Fast-paced open-source hexagonal puzzle game inspired by Tetris.',
@@ -33,8 +70,8 @@ export const gamesList = [
   },
   {
     id: '2048',
-    title: '2048 Puzzle Game',
-    category: 'Logic & Math',
+    title: '2048 Tile Puzzle',
+    category: 'Puzzle & Logic',
     type: 'iframe',
     embedUrl: 'https://gabrielecirulli.github.io/2048/',
     description: 'Join the numbers and get to the 2048 tile! Popular open-source sliding puzzle.',
@@ -44,7 +81,7 @@ export const gamesList = [
   {
     id: 'clumsy-bird',
     title: 'Clumsy Bird (Flappy Clone)',
-    category: 'Action & Timing',
+    category: 'Retro Arcade',
     type: 'iframe',
     embedUrl: 'https://ellisonleao.github.io/clumsy-bird/',
     description: 'Open-source HTML5 canvas bird flight arcade game.',
@@ -81,7 +118,7 @@ function NativeCyberSnake() {
     const ctx = canvas.getContext('2d');
 
     const gridSize = 20;
-    const tileCount = 20; // 400x400 grid
+    const tileCount = 20;
     let snake = [{ x: 10, y: 10 }, { x: 10, y: 11 }, { x: 10, y: 12 }];
     let food = { x: 5, y: 5 };
     let dx = 0;
@@ -105,17 +142,14 @@ function NativeCyberSnake() {
     window.addEventListener('keydown', handleKeyDown);
 
     const interval = setInterval(() => {
-      // Move snake head
       const head = { x: snake[0].x + dx, y: snake[0].y + dy };
 
-      // Wall collision
       if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
         setGameOver(true);
         clearInterval(interval);
         return;
       }
 
-      // Self collision
       for (let i = 0; i < snake.length; i++) {
         if (snake[i].x === head.x && snake[i].y === head.y) {
           setGameOver(true);
@@ -126,7 +160,6 @@ function NativeCyberSnake() {
 
       snake.unshift(head);
 
-      // Eat food
       if (head.x === food.x && head.y === food.y) {
         currentScore += 10;
         setScore(currentScore);
@@ -139,11 +172,9 @@ function NativeCyberSnake() {
         snake.pop();
       }
 
-      // Render
       ctx.fillStyle = '#060913';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Draw Grid lines subtle
       ctx.strokeStyle = 'rgba(255,255,255,0.03)';
       for (let i = 0; i < tileCount; i++) {
         ctx.beginPath();
@@ -156,7 +187,6 @@ function NativeCyberSnake() {
         ctx.stroke();
       }
 
-      // Draw Food
       ctx.fillStyle = '#ec4899';
       ctx.shadowColor = '#ec4899';
       ctx.shadowBlur = 10;
@@ -165,7 +195,6 @@ function NativeCyberSnake() {
       ctx.fill();
       ctx.shadowBlur = 0;
 
-      // Draw Snake
       snake.forEach((part, index) => {
         if (index === 0) {
           ctx.fillStyle = '#00f3ff';
@@ -240,10 +269,15 @@ function NativeCyberSnake() {
 }
 
 export default function WebGames() {
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedGame, setSelectedGame] = useState(gamesList[0]);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   const containerRef = useRef(null);
+
+  const filteredGames = gamesList.filter(g => 
+    selectedCategory === 'all' || g.category === selectedCategory
+  );
 
   const toggleFullscreen = () => {
     if (!containerRef.current) return;
@@ -262,24 +296,43 @@ export default function WebGames() {
       <div style={{ marginBottom: '1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
           <Gamepad2 className="text-cyan" size={28} />
-          <h2 style={{ fontSize: '1.8rem', fontWeight: 800 }}>Free Open-Source <span className="text-cyan">Web Games</span></h2>
+          <h2 style={{ fontSize: '1.8rem', fontWeight: 800 }}>Free Open-Source <span className="text-cyan">Web & 3D Racing Games</span></h2>
         </div>
         <p style={{ color: 'var(--text-muted)' }}>
-          Play popular open-source HTML5 browser games, retro arcade classics, and logic puzzles directly in your browser.
+          Play 3D WebGL racing games, retro arcade classics, and logic puzzles directly inside your browser.
         </p>
       </div>
 
-      {/* Game Selection Pills */}
-      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
-        {gamesList.map((game) => (
-          <button
-            key={game.id}
-            onClick={() => setSelectedGame(game)}
-            className={`btn btn-sm ${selectedGame.id === game.id ? 'btn-primary' : 'btn-outline'}`}
-          >
-            <span>{game.title}</span>
-          </button>
-        ))}
+      {/* Category Pills & Game Selector */}
+      <div style={{ marginBottom: '1.5rem' }}>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
+          {gameCategories.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => {
+                setSelectedCategory(cat.id);
+                const firstMatch = gamesList.find(g => cat.id === 'all' || g.category === cat.id);
+                if (firstMatch) setSelectedGame(firstMatch);
+              }}
+              className={`btn btn-sm ${selectedCategory === cat.id ? 'btn-primary' : 'btn-outline'}`}
+            >
+              <span>{cat.label}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Game Title Buttons */}
+        <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+          {filteredGames.map((game) => (
+            <button
+              key={game.id}
+              onClick={() => setSelectedGame(game)}
+              className={`btn btn-sm ${selectedGame.id === game.id ? 'btn-secondary' : 'btn-outline'}`}
+            >
+              <span>{game.title}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Game Stage Screen */}
@@ -306,7 +359,7 @@ export default function WebGames() {
                 title="View Open Source Repository"
               >
                 <ExternalLink size={15} />
-                <span>Source Code</span>
+                <span>Source Code / Game Link</span>
               </a>
             )}
           </div>
@@ -315,7 +368,7 @@ export default function WebGames() {
         {/* Game Content View */}
         <div style={{
           width: '100%',
-          minHeight: '480px',
+          minHeight: '520px',
           background: '#040711',
           borderRadius: 'var(--radius-sm)',
           border: '1px solid var(--border)',
@@ -333,11 +386,11 @@ export default function WebGames() {
               title={selectedGame.title}
               style={{
                 width: '100%',
-                height: '520px',
+                height: '560px',
                 border: 'none',
-                background: '#fff'
+                background: '#000'
               }}
-              allow="autoplay; payment; fullscreen; microphone; camera"
+              allow="autoplay; payment; fullscreen; microphone; camera; accelerometer; gyroscope"
             />
           )}
         </div>
@@ -345,7 +398,7 @@ export default function WebGames() {
         {/* Game Footer Details */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem', flexWrap: 'wrap', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
           <div>{selectedGame.description}</div>
-          <div>Author / License: <strong className="text-cyan">{selectedGame.author}</strong></div>
+          <div>Author / Developer: <strong className="text-cyan">{selectedGame.author}</strong></div>
         </div>
       </div>
     </section>
