@@ -2,12 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import { 
   Gamepad2, 
   Maximize2, 
+  Minimize2,
   Play, 
   ExternalLink, 
   Search,
   Shuffle,
+  ArrowLeft,
   Sparkles,
-  Zap
+  Zap,
+  CheckCircle2
 } from 'lucide-react';
 
 export const gameCategories = [
@@ -311,10 +314,10 @@ function NativeCyberSnake() {
 export default function WebGames() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedGame, setSelectedGame] = useState(gamesList[0]);
+  const [selectedGame, setSelectedGame] = useState(null); // null opens Library Grid first!
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  const containerRef = useRef(null);
+  const stageContainerRef = useRef(null);
 
   const filteredGames = gamesList.filter(g => {
     const matchesCat = selectedCategory === 'all' || g.category === selectedCategory;
@@ -324,162 +327,278 @@ export default function WebGames() {
     return matchesCat && matchesSearch;
   });
 
+  const handleSelectGame = (game) => {
+    setSelectedGame(game);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleRandomGame = () => {
     const randomIndex = Math.floor(Math.random() * gamesList.length);
-    setSelectedGame(gamesList[randomIndex]);
+    handleSelectGame(gamesList[randomIndex]);
   };
 
   const toggleFullscreen = () => {
-    if (!containerRef.current) return;
-    if (!document.fullscreenElement) {
-      containerRef.current.requestFullscreen().catch(err => console.error(err));
+    if (!isFullscreen) {
+      if (stageContainerRef.current?.requestFullscreen) {
+        stageContainerRef.current.requestFullscreen().catch(err => console.error(err));
+      }
       setIsFullscreen(true);
     } else {
-      document.exitFullscreen();
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(err => console.error(err));
+      }
       setIsFullscreen(false);
     }
   };
 
+  useEffect(() => {
+    const handleFSChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFSChange);
+    document.addEventListener('webkitfullscreenchange', handleFSChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFSChange);
+      document.removeEventListener('webkitfullscreenchange', handleFSChange);
+    };
+  }, []);
+
   return (
-    <section style={{ maxWidth: '1100px', margin: '0 auto' }}>
+    <section style={{ maxWidth: '1200px', margin: '0 auto' }}>
       {/* Page Header */}
       <div style={{ marginBottom: '1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '0.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <Gamepad2 className="text-cyan" size={28} />
-            <h2 style={{ fontSize: '1.8rem', fontWeight: 800 }}>Open-Source <span className="text-cyan">Games Catalog</span></h2>
+            <h2 style={{ fontSize: '1.8rem', fontWeight: 800 }}>
+              {selectedGame ? selectedGame.title : <>Open-Source <span className="text-cyan">Games Library</span></>}
+            </h2>
           </div>
 
-          <button className="btn btn-secondary btn-sm" onClick={handleRandomGame}>
-            <Shuffle size={15} />
-            <span>🎲 Surprise Me (Random Game)</span>
-          </button>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            {selectedGame && (
+              <button className="btn btn-outline btn-sm" onClick={() => setSelectedGame(null)}>
+                <ArrowLeft size={16} />
+                <span>Back to Games Library</span>
+              </button>
+            )}
+
+            <button className="btn btn-secondary btn-sm" onClick={handleRandomGame}>
+              <Shuffle size={15} />
+              <span>🎲 Surprise Me (Random Game)</span>
+            </button>
+          </div>
         </div>
 
-        <p style={{ color: 'var(--text-muted)' }}>
-          Explore an expansive catalog of open-source 3D racing, retro arcade classics, space shooters, and logic puzzles.
-        </p>
+        {!selectedGame && (
+          <p style={{ color: 'var(--text-muted)' }}>
+            Select any open-source game below to launch the playable arcade stage in true full screen!
+          </p>
+        )}
       </div>
 
-      {/* Control Bar: Category Filters & Search */}
-      <div style={{ marginBottom: '1.5rem' }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-          
-          {/* Category Pills */}
-          <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-            {gameCategories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => {
-                  setSelectedCategory(cat.id);
-                  const firstMatch = gamesList.find(g => cat.id === 'all' || g.category === cat.id);
-                  if (firstMatch) setSelectedGame(firstMatch);
-                }}
-                className={`btn btn-sm ${selectedCategory === cat.id ? 'btn-primary' : 'btn-outline'}`}
-              >
-                <span>{cat.label}</span>
-              </button>
-            ))}
-          </div>
+      {/* VIEW 1: GAME LIBRARY GRID (SHOW FIRST BEFORE SELECTING A GAME) */}
+      {!selectedGame ? (
+        <div>
+          {/* Controls Bar: Categories & Search */}
+          <div style={{ marginBottom: '1.75rem' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center', justifyContent: 'space-between' }}>
+              
+              {/* Category Pills */}
+              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                {gameCategories.map((cat) => (
+                  <button
+                    key={cat.id}
+                    onClick={() => setSelectedCategory(cat.id)}
+                    className={`btn btn-sm ${selectedCategory === cat.id ? 'btn-primary' : 'btn-outline'}`}
+                  >
+                    <span>{cat.label}</span>
+                  </button>
+                ))}
+              </div>
 
-          {/* Search Box */}
-          <div style={{ minWidth: '220px', maxWidth: '280px', width: '100%' }}>
-            <div className="search-box">
-              <Search className="search-icon" size={16} />
-              <input 
-                type="text"
-                className="search-input"
-                placeholder="Search games..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ padding: '0.45rem 0.85rem 0.45rem 2.4rem', fontSize: '0.85rem' }}
-              />
+              {/* Search Input */}
+              <div style={{ minWidth: '220px', maxWidth: '280px', width: '100%' }}>
+                <div className="search-box">
+                  <Search className="search-icon" size={16} />
+                  <input 
+                    type="text"
+                    className="search-input"
+                    placeholder="Search games catalog..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    style={{ padding: '0.45rem 0.85rem 0.45rem 2.4rem', fontSize: '0.85rem' }}
+                  />
+                </div>
+              </div>
+
             </div>
           </div>
 
-        </div>
-
-        {/* Game Selection Buttons */}
-        <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-          {filteredGames.map((game) => (
-            <button
-              key={game.id}
-              onClick={() => setSelectedGame(game)}
-              className={`btn btn-sm ${selectedGame.id === game.id ? 'btn-secondary' : 'btn-outline'}`}
-              style={{ fontSize: '0.82rem' }}
-            >
-              <span>{game.title}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Game Stage Screen */}
-      <div className="glass-card" ref={containerRef} style={{ padding: '1.25rem', marginBottom: '1.5rem' }}>
-        {/* Game Stage Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.75rem' }}>
-          <div>
-            <span className="badge badge-purple" style={{ fontSize: '0.75rem', marginBottom: '0.2rem' }}>{selectedGame.category}</span>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 700 }}>{selectedGame.title}</h3>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <button className="btn btn-outline btn-sm" onClick={toggleFullscreen} title="Fullscreen View">
-              <Maximize2 size={15} />
-              <span>Fullscreen</span>
-            </button>
-
-            {selectedGame.sourceUrl !== 'Built-in' && (
-              <a 
-                href={selectedGame.sourceUrl} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="btn btn-secondary btn-sm"
-                title="View Open Source Repository"
+          {/* Library Cards Grid */}
+          <div className="grid-3">
+            {filteredGames.map((game) => (
+              <div 
+                key={game.id} 
+                className="glass-card" 
+                style={{ 
+                  padding: '1.5rem', 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  justify: 'space-between',
+                  cursor: 'pointer',
+                  border: '1px solid var(--border)'
+                }}
+                onClick={() => handleSelectGame(game)}
               >
-                <ExternalLink size={15} />
-                <span>Source Code / Game Link</span>
-              </a>
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
+                    <span className="badge badge-purple" style={{ fontSize: '0.75rem' }}>{game.category}</span>
+                    <span className="badge badge-cyan" style={{ fontSize: '0.7rem' }}>HTML5 / WebGL</span>
+                  </div>
+
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-main)' }}>
+                    {game.title}
+                  </h3>
+
+                  <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '1.25rem' }}>
+                    {game.description}
+                  </p>
+                </div>
+
+                <div>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)', marginBottom: '1rem' }}>
+                    Developer: <strong className="text-cyan">{game.author}</strong>
+                  </div>
+
+                  <button className="btn btn-primary btn-sm" style={{ width: '100%', justifyContent: 'center' }}>
+                    <Play size={16} />
+                    <span>Play Game</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        /* VIEW 2: PLAY STAGE SCREEN (OPENED AFTER SELECTING A GAME) */
+        <div>
+          {/* Game Stage Screen Container */}
+          <div 
+            ref={stageContainerRef}
+            className="glass-card"
+            style={{
+              padding: isFullscreen ? 0 : '1.25rem',
+              marginBottom: '1.5rem',
+              position: isFullscreen ? 'fixed' : 'relative',
+              top: isFullscreen ? 0 : 'auto',
+              left: isFullscreen ? 0 : 'auto',
+              width: isFullscreen ? '100vw' : '100%',
+              height: isFullscreen ? '100vh' : 'auto',
+              zIndex: isFullscreen ? 99999 : 1,
+              background: isFullscreen ? '#000' : 'var(--bg-card)',
+              borderRadius: isFullscreen ? 0 : 'var(--radius-md)',
+              display: 'flex',
+              flexDirection: 'column',
+              justify: 'space-between'
+            }}
+          >
+            {/* Stage Header (Shown when not fullscreen) */}
+            {!isFullscreen && (
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.75rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <button className="btn btn-outline btn-sm" onClick={() => setSelectedGame(null)}>
+                    <ArrowLeft size={15} />
+                    <span>Back to Library</span>
+                  </button>
+                  <div>
+                    <span className="badge badge-purple" style={{ fontSize: '0.75rem' }}>{selectedGame.category}</span>
+                    <h3 style={{ fontSize: '1.2rem', fontWeight: 700, display: 'inline', marginLeft: '0.5rem' }}>{selectedGame.title}</h3>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <button className="btn btn-primary btn-sm" onClick={toggleFullscreen} title="Enter True Fullscreen Mode">
+                    <Maximize2 size={15} />
+                    <span>True Fullscreen</span>
+                  </button>
+
+                  {selectedGame.sourceUrl !== 'Built-in' && (
+                    <a 
+                      href={selectedGame.sourceUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="btn btn-secondary btn-sm"
+                      title="View Open Source Repository"
+                    >
+                      <ExternalLink size={15} />
+                      <span>Source Code</span>
+                    </a>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* True Fullscreen Floating Exit Button */}
+            {isFullscreen && (
+              <div style={{
+                position: 'fixed',
+                top: '12px',
+                right: '12px',
+                zIndex: 100000,
+                display: 'flex',
+                gap: '0.5rem'
+              }}>
+                <button 
+                  className="btn btn-primary btn-sm" 
+                  onClick={toggleFullscreen}
+                  style={{ opacity: 0.85, boxShadow: '0 0 15px rgba(0,0,0,0.8)' }}
+                >
+                  <Minimize2 size={16} />
+                  <span>Exit Fullscreen</span>
+                </button>
+              </div>
+            )}
+
+            {/* Main Game Render Frame (Fills Screen Completely in Fullscreen) */}
+            <div style={{
+              width: '100%',
+              height: isFullscreen ? '100vh' : '580px',
+              background: '#000',
+              borderRadius: isFullscreen ? 0 : 'var(--radius-sm)',
+              overflow: 'hidden',
+              display: 'flex',
+              alignItems: 'center',
+              justify: 'center'
+            }}>
+              {selectedGame.type === 'native' ? (
+                <NativeCyberSnake />
+              ) : (
+                <iframe 
+                  src={selectedGame.embedUrl}
+                  title={selectedGame.title}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    border: 'none',
+                    background: '#000'
+                  }}
+                  allow="autoplay; payment; fullscreen; microphone; camera; accelerometer; gyroscope"
+                  allowFullScreen
+                />
+              )}
+            </div>
+
+            {/* Stage Footer (Shown when not fullscreen) */}
+            {!isFullscreen && (
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem', flexWrap: 'wrap', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                <div>{selectedGame.description}</div>
+                <div>Developer: <strong className="text-cyan">{selectedGame.author}</strong></div>
+              </div>
             )}
           </div>
         </div>
-
-        {/* Game Content View */}
-        <div style={{
-          width: '100%',
-          minHeight: '520px',
-          background: '#040711',
-          borderRadius: 'var(--radius-sm)',
-          border: '1px solid var(--border)',
-          overflow: 'hidden',
-          display: 'flex',
-          alignItems: 'center',
-          justify: 'center',
-          position: 'relative'
-        }}>
-          {selectedGame.type === 'native' ? (
-            <NativeCyberSnake />
-          ) : (
-            <iframe 
-              src={selectedGame.embedUrl}
-              title={selectedGame.title}
-              style={{
-                width: '100%',
-                height: '560px',
-                border: 'none',
-                background: '#000'
-              }}
-              allow="autoplay; payment; fullscreen; microphone; camera; accelerometer; gyroscope"
-            />
-          )}
-        </div>
-
-        {/* Game Footer Details */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem', flexWrap: 'wrap', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-          <div>{selectedGame.description}</div>
-          <div>Developer / License: <strong className="text-cyan">{selectedGame.author}</strong></div>
-        </div>
-      </div>
+      )}
     </section>
   );
 }
