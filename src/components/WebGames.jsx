@@ -1422,19 +1422,16 @@ const getStoredUserRatings = () => {
   return {};
 };
 
-export default function WebGames() {
+export default function WebGames({ setActiveTab }) {
   const [games, setGames] = useState(initialGamesList);
   const [pool, setPool] = useState(discoverableGamesPool);
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [sortMode, setSortMode] = useState('most-played'); // 'most-played' | 'top-rated'
+  const [sortMode, setSortMode] = useState('most-played');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGame, setSelectedGame] = useState(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  // Pure Real Play count tracking
   const [playCounts, setPlayCounts] = useState(getStoredPlayCounts);
-
-  // User ratings tracking
   const [userRatings, setUserRatings] = useState(getStoredUserRatings);
   const [ratingToast, setRatingToast] = useState(null);
 
@@ -1461,7 +1458,6 @@ export default function WebGames() {
     return () => clearInterval(timer);
   }, []);
 
-  // Compute Game Rating Object (Base data + user's custom rating)
   const getGameRatingObj = (gameId) => {
     const base = baseRatingsData[gameId] || { sum: 20, count: 5 };
     const userStar = userRatings[gameId];
@@ -1480,7 +1476,6 @@ export default function WebGames() {
     };
   };
 
-  // Handle User Star Rating
   const handleRateGame = (game, stars) => {
     const updated = {
       ...userRatings,
@@ -1495,7 +1490,6 @@ export default function WebGames() {
     setTimeout(() => setRatingToast(null), 4000);
   };
 
-  // Sort games dynamically based on sortMode
   const sortedGames = [...games].sort((a, b) => {
     if (sortMode === 'top-rated') {
       const rA = getGameRatingObj(a.id);
@@ -1515,7 +1509,6 @@ export default function WebGames() {
     ? sortedGames[0].id 
     : null;
 
-  // Highest Rated Game calculation
   const topRatedGameId = sortedGames.length > 0 ? [...games].sort((a, b) => {
     const rA = getGameRatingObj(a.id);
     const rB = getGameRatingObj(b.id);
@@ -1577,6 +1570,57 @@ export default function WebGames() {
 
   return (
     <section style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 0.5rem' }}>
+      
+      {/* Standalone Gaming Top Navigation Bar (Replaces Main Header) */}
+      <div 
+        className="glass-card" 
+        style={{
+          padding: '0.85rem 1.25rem',
+          marginBottom: '1.25rem',
+          display: 'flex',
+          alignItems: 'center',
+          justify: 'space-between',
+          background: 'rgba(6, 12, 26, 0.95)',
+          border: '1px solid var(--border-cyan)',
+          boxShadow: '0 0 20px rgba(0, 243, 255, 0.15)',
+          flexWrap: 'wrap',
+          gap: '0.75rem'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <div style={{
+            width: '38px',
+            height: '38px',
+            borderRadius: '10px',
+            background: 'linear-gradient(135deg, var(--cyan), var(--purple))',
+            display: 'flex',
+            alignItems: 'center',
+            justify: 'center',
+            boxShadow: '0 0 12px var(--cyan-glow)'
+          }}>
+            <Gamepad2 size={22} className="text-white" />
+          </div>
+          <div>
+            <h1 style={{ fontSize: '1.2rem', fontWeight: 800, letterSpacing: '0.5px', color: 'var(--text-main)', margin: 0, lineHeight: 1.2 }}>
+              CYBER ARCADE <span className="text-cyan">WEBGAMES</span>
+            </h1>
+            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+              FREE BROWSER GAMES • 3D RACERS • RETRO CLASSICS
+            </div>
+          </div>
+        </div>
+
+        {setActiveTab && (
+          <button 
+            className="btn btn-outline btn-sm" 
+            onClick={() => setActiveTab('fundamentals')}
+            style={{ fontSize: '0.82rem', borderColor: 'var(--border-purple)' }}
+          >
+            <span>🧙‍♂️ Return to Cyber Wizard Tech Portal</span>
+          </button>
+        )}
+      </div>
+
       {/* High-Octane Gaming Banner Header */}
       <div 
         className="glass-card" 
@@ -1596,7 +1640,7 @@ export default function WebGames() {
           left: 0,
           right: 0,
           height: '3px',
-          background: 'linear-gradient(90deg, var(--cyan), var(--purple), var(--pink))'
+          background: 'gradient(90deg, var(--cyan), var(--purple), var(--pink))'
         }} />
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
