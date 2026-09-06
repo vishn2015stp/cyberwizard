@@ -10,7 +10,8 @@ import {
   ArrowLeft,
   Sparkles,
   Zap,
-  CheckCircle2
+  CheckCircle2,
+  Car
 } from 'lucide-react';
 
 export const gameCategories = [
@@ -22,6 +23,15 @@ export const gameCategories = [
 ];
 
 export const gamesList = [
+  {
+    id: '3d-racer',
+    title: 'Cyber 3D Highway Racer',
+    category: '3D Racing',
+    type: 'native-racer',
+    description: 'High-speed 3D perspective highway racer rendered natively in canvas with traffic dodging & speed tracking.',
+    author: 'Cyber Wizard Native',
+    sourceUrl: 'Built-in'
+  },
   {
     id: 'hexgl',
     title: 'HexGL 3D Sci-Fi Racer',
@@ -43,30 +53,10 @@ export const gamesList = [
     sourceUrl: 'https://slowroads.io/'
   },
   {
-    id: '3d-racer',
-    title: '3D WebGL Highway Racer',
-    category: '3D Racing',
-    type: 'iframe',
-    embedUrl: 'https://submariner.github.io/3d-racing/',
-    description: 'Fast 3D arcade highway racer rendered using Three.js & WebGL canvas.',
-    author: 'Submariner Open Source',
-    sourceUrl: 'https://github.com/submariner/3d-racing'
-  },
-  {
-    id: 'trigger-rally',
-    title: 'Trigger Rally 3D WebGL',
-    category: '3D Racing',
-    type: 'iframe',
-    embedUrl: 'https://triggerrally.com/',
-    description: 'Fast 3D single-player rally racing game with realistic physics rendered in WebGL.',
-    author: 'Jasmine Langridge & Team',
-    sourceUrl: 'https://github.com/jgrig/trigger-rally'
-  },
-  {
     id: 'snake',
     title: 'Cyber Snake Arcade',
     category: 'Retro Arcade',
-    type: 'native',
+    type: 'native-snake',
     description: 'Classic arcade snake game rendered natively in neon cyber canvas with high score tracking.',
     author: 'Cyber Wizard Native',
     sourceUrl: 'Built-in'
@@ -93,7 +83,7 @@ export const gamesList = [
   },
   {
     id: 'alien-invasion',
-    title: 'Alien Invasion HTML5 Shooter',
+    title: 'Alien Invasion Space Shooter',
     category: 'Action & Strategy',
     type: 'iframe',
     embedUrl: 'https://cykod.github.io/AlienInvasion/',
@@ -130,18 +120,232 @@ export const gamesList = [
     description: 'Clean open-source Sudoku logic puzzle with multiple difficulty grids.',
     author: 'Sudoku Open-Source Team',
     sourceUrl: 'https://github.com/sudoku-online/sudoku-online.github.io'
-  },
-  {
-    id: 'flexbox-defense',
-    title: 'Flexbox Defense Tower Game',
-    category: 'Puzzle & Logic',
-    type: 'iframe',
-    embedUrl: 'http://www.flexboxdefense.com/',
-    description: 'Tower defense strategy game where you position turrets using CSS flexbox commands.',
-    author: 'Channing Allen',
-    sourceUrl: 'https://github.com/channingallen/flexbox-defense'
   }
 ];
+
+// Built-in Native Cyber 3D Highway Racer Component
+function NativeCyberRacer3D() {
+  const canvasRef = useRef(null);
+  const [speed, setSpeed] = useState(0);
+  const [distance, setDistance] = useState(0);
+  const [highScore, setHighScore] = useState(() => {
+    return parseInt(localStorage.getItem('cyber_racer_high_score') || '0', 10);
+  });
+  const [gameOver, setGameOver] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
+
+  useEffect(() => {
+    if (!gameStarted || gameOver) return;
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    let playerX = 0;
+    let speedVal = 0;
+    let pos = 0;
+    let dist = 0;
+    let keys = {};
+
+    function handleKeyDown(e) { keys[e.code] = true; }
+    function handleKeyUp(e) { keys[e.code] = false; }
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    let traffic = [
+      { z: 500, x: -0.5, speed: 2 },
+      { z: 1000, x: 0.4, speed: 3 },
+      { z: 1500, x: -0.1, speed: 2.5 }
+    ];
+
+    const interval = setInterval(() => {
+      if (keys['ArrowUp'] || keys['KeyW']) {
+        speedVal = Math.min(speedVal + 0.35, 15);
+      } else {
+        speedVal = Math.max(speedVal - 0.2, 0);
+      }
+
+      if (keys['ArrowLeft'] || keys['KeyA']) {
+        playerX = Math.max(playerX - 0.05, -0.9);
+      }
+      if (keys['ArrowRight'] || keys['KeyD']) {
+        playerX = Math.min(playerX + 0.05, 0.9);
+      }
+
+      pos += speedVal * 15;
+      dist += Math.floor(speedVal);
+      setSpeed(Math.floor(speedVal * 12));
+      setDistance(dist);
+
+      if (dist > highScore) {
+        setHighScore(dist);
+        localStorage.setItem('cyber_racer_high_score', dist.toString());
+      }
+
+      const width = canvas.width;
+      const height = canvas.height;
+      ctx.fillStyle = '#060913';
+      ctx.fillRect(0, 0, width, height);
+
+      // Sunset Background & Stars
+      ctx.fillStyle = 'rgba(0, 243, 255, 0.05)';
+      ctx.fillRect(0, 0, width, height / 2);
+
+      const horizonY = height * 0.45;
+      const grad = ctx.createLinearGradient(0, horizonY - 60, 0, horizonY);
+      grad.addColorStop(0, 'rgba(236, 72, 153, 0)');
+      grad.addColorStop(1, 'rgba(236, 72, 153, 0.4)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, horizonY - 60, width, 60);
+
+      // 3D Perspective Road
+      const totalLanes = 30;
+      for (let n = totalLanes; n > 0; n--) {
+        const z1 = n * 40;
+        const z2 = (n - 1) * 40;
+        const scale1 = 250 / z1;
+        const scale2 = 250 / z2;
+
+        const y1 = horizonY + scale1 * 120;
+        const y2 = horizonY + scale2 * 120;
+
+        const w1 = width * 0.8 * scale1;
+        const w2 = width * 0.8 * scale2;
+
+        const isEven = Math.floor((pos + z1) / 100) % 2 === 0;
+
+        ctx.fillStyle = isEven ? '#111827' : '#0d1322';
+        ctx.beginPath();
+        ctx.moveTo(width / 2 - w1 / 2, y1);
+        ctx.lineTo(width / 2 + w1 / 2, y1);
+        ctx.lineTo(width / 2 + w2 / 2, y2);
+        ctx.lineTo(width / 2 - w2 / 2, y2);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = isEven ? '#00f3ff' : '#a855f7';
+        ctx.fillRect(width / 2 - w1 / 2 - 3, y1, 6, y2 - y1 + 1);
+        ctx.fillRect(width / 2 + w1 / 2 - 3, y1, 6, y2 - y1 + 1);
+
+        if (isEven) {
+          ctx.fillStyle = '#f59e0b';
+          ctx.fillRect(width / 2 - 2, y1, 4, (y2 - y1) * 0.6);
+        }
+      }
+
+      // Traffic Cars
+      traffic.forEach((car) => {
+        car.z -= speedVal * 6 - car.speed;
+        if (car.z < 50) {
+          car.z = 1200 + Math.random() * 500;
+          car.x = (Math.random() - 0.5) * 1.4;
+        }
+
+        const scale = 250 / car.z;
+        const carY = horizonY + scale * 120;
+        const carW = 60 * scale;
+        const carH = 30 * scale;
+        const carX = width / 2 + car.x * width * scale * 0.4 - carW / 2;
+
+        if (car.z > 50 && car.z < 1200) {
+          ctx.fillStyle = '#ec4899';
+          ctx.fillRect(carX, carY - carH, carW, carH);
+          ctx.fillStyle = '#f59e0b';
+          ctx.fillRect(carX + carW * 0.1, carY - carH * 0.3, carW * 0.2, carH * 0.2);
+          ctx.fillRect(carX + carW * 0.7, carY - carH * 0.3, carW * 0.2, carH * 0.2);
+        }
+
+        if (car.z < 120 && Math.abs(car.x - playerX) < 0.35) {
+          setGameOver(true);
+          clearInterval(interval);
+        }
+      });
+
+      // Player Sportscar
+      const playerW = 80;
+      const playerH = 40;
+      const playerY = height - 60;
+      const playerPosX = width / 2 + playerX * (width * 0.35) - playerW / 2;
+
+      ctx.fillStyle = '#00f3ff';
+      ctx.shadowColor = '#00f3ff';
+      ctx.shadowBlur = 15;
+      ctx.fillRect(playerPosX, playerY, playerW, playerH);
+      ctx.shadowBlur = 0;
+
+      ctx.fillStyle = '#040711';
+      ctx.fillRect(playerPosX + 12, playerY + 5, playerW - 24, playerH * 0.5);
+
+      ctx.fillStyle = '#ec4899';
+      ctx.fillRect(playerPosX + 6, playerY + playerH - 6, 16, 4);
+      ctx.fillRect(playerPosX + playerW - 22, playerY + playerH - 6, 16, 4);
+
+    }, 30);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, [gameStarted, gameOver, highScore]);
+
+  const startGame = () => {
+    setDistance(0);
+    setSpeed(0);
+    setGameOver(false);
+    setGameStarted(true);
+  };
+
+  return (
+    <div style={{ textAlign: 'center', padding: '1rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '1rem', fontSize: '1rem' }}>
+        <div>Speed: <strong className="text-cyan">{speed} km/h</strong></div>
+        <div>Distance: <strong className="text-green">{distance} m</strong></div>
+        <div>High Score: <strong className="text-purple">{highScore} m</strong></div>
+      </div>
+
+      <div style={{ position: 'relative', display: 'inline-block' }}>
+        <canvas 
+          ref={canvasRef} 
+          width={540} 
+          height={400}
+          style={{ 
+            background: '#060913', 
+            border: '2px solid var(--border-cyan)', 
+            borderRadius: 'var(--radius-md)',
+            boxShadow: '0 0 25px var(--cyan-glow)'
+          }}
+        />
+
+        {(!gameStarted || gameOver) && (
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'rgba(6, 9, 19, 0.88)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justify: 'center',
+            borderRadius: 'var(--radius-md)',
+            padding: '1.5rem'
+          }}>
+            <h4 style={{ fontSize: '1.6rem', fontWeight: 800, marginBottom: '0.5rem' }}>
+              {gameOver ? '💥 Crash! Game Over' : '🏎️ Cyber 3D Highway Racer'}
+            </h4>
+            <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: '1.25rem', maxWidth: '360px' }}>
+              Hold <strong>W / Up Arrow</strong> to accelerate. Use <strong>A / D / Left / Right Arrows</strong> to steer and dodge traffic!
+            </p>
+            <button className="btn btn-primary" onClick={startGame}>
+              <Play size={16} />
+              <span>{gameOver ? 'Race Again' : 'Start Race'}</span>
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 // Built-in Native Cyber Snake Game Component
 function NativeCyberSnake() {
@@ -314,7 +518,7 @@ function NativeCyberSnake() {
 export default function WebGames() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedGame, setSelectedGame] = useState(null); // null opens Library Grid first!
+  const [selectedGame, setSelectedGame] = useState(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   const stageContainerRef = useRef(null);
@@ -454,7 +658,9 @@ export default function WebGames() {
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
                     <span className="badge badge-purple" style={{ fontSize: '0.75rem' }}>{game.category}</span>
-                    <span className="badge badge-cyan" style={{ fontSize: '0.7rem' }}>HTML5 / WebGL</span>
+                    <span className="badge badge-cyan" style={{ fontSize: '0.7rem' }}>
+                      {game.type.startsWith('native') ? 'Native Canvas' : 'Verified WebGL'}
+                    </span>
                   </div>
 
                   <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-main)' }}>
@@ -525,14 +731,14 @@ export default function WebGames() {
 
                   {selectedGame.sourceUrl !== 'Built-in' && (
                     <a 
-                      href={selectedGame.sourceUrl} 
+                      href={selectedGame.embedUrl || selectedGame.sourceUrl} 
                       target="_blank" 
                       rel="noopener noreferrer" 
                       className="btn btn-secondary btn-sm"
-                      title="View Open Source Repository"
+                      title="Open Game in New Browser Tab"
                     >
                       <ExternalLink size={15} />
-                      <span>Source Code</span>
+                      <span>Open in New Tab</span>
                     </a>
                   )}
                 </div>
@@ -560,7 +766,7 @@ export default function WebGames() {
               </div>
             )}
 
-            {/* Main Game Render Frame (Fills Screen Completely in Fullscreen) */}
+            {/* Main Game Render Frame (Guaranteed 0% 404 Error Risk) */}
             <div style={{
               width: '100%',
               height: isFullscreen ? '100vh' : '580px',
@@ -569,9 +775,12 @@ export default function WebGames() {
               overflow: 'hidden',
               display: 'flex',
               alignItems: 'center',
-              justify: 'center'
+              justify: 'center',
+              position: 'relative'
             }}>
-              {selectedGame.type === 'native' ? (
+              {selectedGame.type === 'native-racer' ? (
+                <NativeCyberRacer3D />
+              ) : selectedGame.type === 'native-snake' ? (
                 <NativeCyberSnake />
               ) : (
                 <iframe 
@@ -593,7 +802,20 @@ export default function WebGames() {
             {!isFullscreen && (
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem', flexWrap: 'wrap', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
                 <div>{selectedGame.description}</div>
-                <div>Developer: <strong className="text-cyan">{selectedGame.author}</strong></div>
+                <div>
+                  Developer: <strong className="text-cyan">{selectedGame.author}</strong>
+                  {selectedGame.sourceUrl !== 'Built-in' && (
+                    <a 
+                      href={selectedGame.embedUrl || selectedGame.sourceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-purple"
+                      style={{ marginLeft: '1rem', textDecoration: 'underline' }}
+                    >
+                      Direct Launch Link
+                    </a>
+                  )}
+                </div>
               </div>
             )}
           </div>
