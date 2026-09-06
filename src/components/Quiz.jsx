@@ -10,7 +10,6 @@ import {
   Lightbulb, 
   Globe, 
   Loader2, 
-  Sparkles,
   Zap
 } from 'lucide-react';
 
@@ -122,102 +121,99 @@ export default function Quiz() {
   };
 
   return (
-    <section>
-      {/* Header Info */}
-      <div style={{ marginBottom: '2rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '0.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <HelpCircle className="text-pink" size={28} />
-            <h2 style={{ fontSize: '1.8rem', fontWeight: 800 }}>Live Tech <span className="text-pink">Quiz</span></h2>
+    <section style={{ maxWidth: '1000px', margin: '0 auto' }}>
+      {/* Header Info & Control Bar (Fit to Screen Compact Layout) */}
+      <div style={{ marginBottom: '1.25rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '0.75rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <HelpCircle className="text-pink" size={24} />
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 800 }}>Live Tech <span className="text-pink">Quiz</span></h2>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-            <span className={`badge ${isInternetConnected ? 'badge-cyan' : 'badge-amber'}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.8rem' }}>
-              <Globe size={14} />
-              <span>{isInternetConnected ? '🌐 Live Internet Questions' : '⚡ Local IT Bank'}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <span className={`badge ${isInternetConnected ? 'badge-cyan' : 'badge-amber'}`} style={{ fontSize: '0.75rem' }}>
+              <Globe size={13} />
+              <span>{isInternetConnected ? '🌐 Live Internet' : '⚡ Local IT Bank'}</span>
             </span>
           </div>
         </div>
 
-        <p style={{ color: 'var(--text-muted)' }}>
-          Practice computer science, hardware, networking, and system questions automatically fetched from live internet question sources.
-        </p>
-      </div>
+        {/* Compact Controls & Stats Bar */}
+        <div className="glass-card" style={{ padding: '0.75rem 1.25rem' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem' }}>
+            
+            {/* Difficulty Buttons */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)', fontWeight: 600 }}>Level:</span>
+              {[
+                { id: 'all', label: 'All' },
+                { id: 'easy', label: 'Easy' },
+                { id: 'medium', label: 'Medium' },
+                { id: 'hard', label: 'Hard' }
+              ].map((diff) => (
+                <button
+                  key={diff.id}
+                  onClick={() => handleDifficultyChange(diff.id)}
+                  className={`btn btn-sm ${difficulty === diff.id ? 'btn-primary' : 'btn-outline'}`}
+                  style={{ padding: '0.25rem 0.65rem', fontSize: '0.8rem' }}
+                  disabled={loading}
+                >
+                  {diff.label}
+                </button>
+              ))}
+            </div>
 
-      {/* Control Bar: Difficulty Filters & Quiz Stats */}
-      <div className="glass-card" style={{ padding: '1.25rem', marginBottom: '2rem' }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
-          
-          {/* Difficulty Buttons */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-dim)', fontWeight: 600 }}>Difficulty:</span>
-            {[
-              { id: 'all', label: 'All Levels' },
-              { id: 'easy', label: 'Easy' },
-              { id: 'medium', label: 'Medium' },
-              { id: 'hard', label: 'Hard' }
-            ].map((diff) => (
-              <button
-                key={diff.id}
-                onClick={() => handleDifficultyChange(diff.id)}
-                className={`btn btn-sm ${difficulty === diff.id ? 'btn-primary' : 'btn-outline'}`}
-                disabled={loading}
-              >
-                {diff.label}
-              </button>
-            ))}
+            {/* Score Counter */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.85rem' }}>
+              <div>
+                <span style={{ color: 'var(--text-dim)' }}>Batch: </span>
+                <strong className="text-purple">#{batchCount}</strong>
+              </div>
+              <div>
+                <span style={{ color: 'var(--text-dim)' }}>Total Answered: </span>
+                <strong className="text-cyan">{totalAttempted}</strong>
+              </div>
+              <div>
+                <span style={{ color: 'var(--text-dim)' }}>Score: </span>
+                <strong className="text-green">{cumulativeScore}</strong>
+              </div>
+            </div>
+
           </div>
-
-          {/* Cumulative Score Counter */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', fontSize: '0.9rem' }}>
-            <div>
-              <span style={{ color: 'var(--text-dim)' }}>Batch: </span>
-              <strong className="text-purple">#{batchCount}</strong>
-            </div>
-            <div>
-              <span style={{ color: 'var(--text-dim)' }}>Total Answered: </span>
-              <strong className="text-cyan">{totalAttempted}</strong>
-            </div>
-            <div>
-              <span style={{ color: 'var(--text-dim)' }}>Total Score: </span>
-              <strong className="text-green">{cumulativeScore}</strong>
-            </div>
-          </div>
-
         </div>
       </div>
 
       {/* Loading Skeleton */}
       {loading ? (
-        <div className="glass-card" style={{ padding: '4rem 2rem', textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
-          <Loader2 size={44} className="text-cyan animate-pulse" style={{ margin: '0 auto 1.5rem auto' }} />
-          <h3 style={{ fontSize: '1.4rem', fontWeight: 700, marginBottom: '0.5rem' }}>Fetching Live Questions from Internet...</h3>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>
-            Connecting to global computer science & IT question databases...
+        <div className="glass-card" style={{ padding: '3rem 2rem', textAlign: 'center' }}>
+          <Loader2 size={36} className="text-cyan animate-pulse" style={{ margin: '0 auto 1rem auto' }} />
+          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.35rem' }}>Fetching Live Questions...</h3>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem' }}>
+            Connecting to computer science & IT question database...
           </p>
         </div>
       ) : !quizFinished && currentQ ? (
-        /* Question Card */
-        <div className="glass-card" style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
+        /* Screen-Optimized Question & Option Container */
+        <div className="glass-card" style={{ padding: '1.25rem 1.5rem' }}>
           
           {/* Header Progress */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span className="badge badge-purple">Question {currentIndex + 1} of {questions.length}</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.6rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <span className="badge badge-purple" style={{ fontSize: '0.75rem' }}>Q{currentIndex + 1} of {questions.length}</span>
               {currentQ.difficulty && (
-                <span className="badge badge-cyan" style={{ textTransform: 'uppercase' }}>
+                <span className="badge badge-cyan" style={{ textTransform: 'uppercase', fontSize: '0.7rem' }}>
                   {currentQ.difficulty}
                 </span>
               )}
             </div>
 
-            <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>
               Round Score: <strong className="text-cyan">{currentRoundScore}</strong> / {questions.length}
             </span>
           </div>
 
           {/* Progress Bar */}
-          <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '3px', marginBottom: '2rem', overflow: 'hidden' }}>
+          <div style={{ width: '100%', height: '5px', background: 'rgba(255,255,255,0.08)', borderRadius: '3px', marginBottom: '1rem', overflow: 'hidden' }}>
             <div style={{
               width: `${((currentIndex + 1) / questions.length) * 100}%`,
               height: '100%',
@@ -227,12 +223,17 @@ export default function Quiz() {
           </div>
 
           {/* Question Text */}
-          <h3 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: '1.75rem', lineHeight: 1.4 }}>
+          <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '1rem', lineHeight: 1.4, minHeight: '2.5rem' }}>
             {currentQ.question}
           </h3>
 
-          {/* Options Grid */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginBottom: '2rem' }}>
+          {/* Options Grid (2x2 Fit to Screen Grid) */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '0.75rem',
+            marginBottom: '1rem'
+          }}>
             {currentQ.options.map((optText, optIdx) => {
               let optionStyle = {
                 background: 'rgba(6, 9, 19, 0.6)',
@@ -262,7 +263,7 @@ export default function Quiz() {
                   key={optIdx}
                   onClick={() => handleSelectOption(optIdx)}
                   style={{
-                    padding: '1rem 1.25rem',
+                    padding: '0.75rem 1rem',
                     borderRadius: 'var(--radius-sm)',
                     cursor: isAnswered ? 'default' : 'pointer',
                     transition: 'var(--transition)',
@@ -270,20 +271,21 @@ export default function Quiz() {
                     alignItems: 'center',
                     justify: 'space-between',
                     fontWeight: 500,
-                    fontSize: '0.98rem',
+                    fontSize: '0.9rem',
+                    minHeight: '52px',
                     ...optionStyle
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
                     <span style={{
-                      width: '28px',
-                      height: '28px',
+                      width: '24px',
+                      height: '24px',
                       borderRadius: '50%',
                       background: 'rgba(255,255,255,0.05)',
                       display: 'flex',
                       alignItems: 'center',
                       justify: 'center',
-                      fontSize: '0.85rem',
+                      fontSize: '0.78rem',
                       fontWeight: 700,
                       flexShrink: 0
                     }}>
@@ -294,9 +296,9 @@ export default function Quiz() {
 
                   {isAnswered && (
                     optIdx === currentQ.correctAnswer ? (
-                      <CheckCircle2 className="text-green" size={20} />
+                      <CheckCircle2 className="text-green" size={18} style={{ flexShrink: 0 }} />
                     ) : (selectedOption === optIdx && (
-                      <XCircle className="text-pink" size={20} />
+                      <XCircle className="text-pink" size={18} style={{ flexShrink: 0 }} />
                     ))
                   )}
                 </div>
@@ -308,29 +310,29 @@ export default function Quiz() {
           {isAnswered && (
             <div style={{
               background: 'rgba(0, 243, 255, 0.08)',
-              borderLeft: '4px solid var(--cyan)',
-              padding: '1rem 1.25rem',
+              borderLeft: '3px solid var(--cyan)',
+              padding: '0.65rem 1rem',
               borderRadius: '0 var(--radius-sm) var(--radius-sm) 0',
-              marginBottom: '2rem',
+              marginBottom: '1rem',
               display: 'flex',
               alignItems: 'flex-start',
-              gap: '0.75rem'
+              gap: '0.6rem'
             }}>
-              <Lightbulb size={20} className="text-cyan" style={{ flexShrink: 0, marginTop: '2px' }} />
+              <Lightbulb size={18} className="text-cyan" style={{ flexShrink: 0, marginTop: '2px' }} />
               <div>
-                <strong style={{ color: 'var(--cyan)', display: 'block', fontSize: '0.88rem', marginBottom: '0.2rem' }}>
+                <strong style={{ color: 'var(--cyan)', display: 'block', fontSize: '0.8rem', marginBottom: '0.1rem' }}>
                   EXPLANATION & SOURCE
                 </strong>
-                <span style={{ fontSize: '0.9rem', color: 'var(--text-main)' }}>{currentQ.explanation}</span>
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-main)' }}>{currentQ.explanation}</span>
               </div>
             </div>
           )}
 
           {/* Action Buttons */}
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
             {!isAnswered ? (
               <button 
-                className="btn btn-primary" 
+                className="btn btn-primary btn-sm" 
                 onClick={handleConfirmAnswer}
                 disabled={selectedOption === null}
                 style={{ opacity: selectedOption === null ? 0.5 : 1, cursor: selectedOption === null ? 'not-allowed' : 'pointer' }}
@@ -338,58 +340,58 @@ export default function Quiz() {
                 <span>Submit Answer</span>
               </button>
             ) : (
-              <button className="btn btn-primary" onClick={handleNextQuestion}>
-                <span>{currentIndex + 1 === questions.length ? 'See Round Summary' : 'Next Question'}</span>
-                <ArrowRight size={16} />
+              <button className="btn btn-primary btn-sm" onClick={handleNextQuestion}>
+                <span>{currentIndex + 1 === questions.length ? 'See Summary' : 'Next Question'}</span>
+                <ArrowRight size={15} />
               </button>
             )}
           </div>
         </div>
       ) : (
         /* Round Complete Summary */
-        <div className="glass-card" style={{ padding: '3rem 2rem', textAlign: 'center', maxWidth: '650px', margin: '0 auto' }}>
+        <div className="glass-card" style={{ padding: '2.5rem 1.5rem', textAlign: 'center' }}>
           <div style={{
-            width: '80px',
-            height: '80px',
+            width: '64px',
+            height: '64px',
             borderRadius: '50%',
             background: 'linear-gradient(135deg, var(--cyan), var(--purple))',
             display: 'flex',
             alignItems: 'center',
             justify: 'center',
-            margin: '0 auto 1.5rem auto',
-            boxShadow: '0 0 30px var(--cyan-glow)'
+            margin: '0 auto 1rem auto',
+            boxShadow: '0 0 25px var(--cyan-glow)'
           }}>
-            <Award size={40} color="#040914" />
+            <Award size={32} color="#040914" />
           </div>
 
-          <h3 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '0.5rem' }}>Batch #{batchCount} Completed!</h3>
-          <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>Round Score Performance:</p>
+          <h3 style={{ fontSize: '1.6rem', fontWeight: 800, marginBottom: '0.35rem' }}>Batch #{batchCount} Completed!</h3>
+          <p style={{ color: 'var(--text-muted)', marginBottom: '1rem', fontSize: '0.9rem' }}>Round Score Performance:</p>
 
           <div style={{
-            fontSize: '3rem',
+            fontSize: '2.5rem',
             fontWeight: 800,
             color: 'var(--cyan)',
-            marginBottom: '1rem',
-            textShadow: '0 0 20px var(--cyan-glow)'
+            marginBottom: '0.75rem',
+            textShadow: '0 0 15px var(--cyan-glow)'
           }}>
             {currentRoundScore} / {questions.length}
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', marginBottom: '2rem', background: 'rgba(6,9,19,0.5)', padding: '1rem', borderRadius: 'var(--radius-sm)' }}>
+          <div style={{ display: 'inline-flex', justifyContent: 'center', gap: '1.25rem', marginBottom: '1.5rem', background: 'rgba(6,9,19,0.5)', padding: '0.75rem 1.25rem', borderRadius: 'var(--radius-sm)' }}>
             <div>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-dim)', display: 'block' }}>Total Cumulative Score</span>
-              <strong style={{ fontSize: '1.2rem', color: 'var(--green)' }}>{cumulativeScore} / {totalAttempted}</strong>
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)', display: 'block' }}>Total Cumulative Score</span>
+              <strong style={{ fontSize: '1.1rem', color: 'var(--green)' }}>{cumulativeScore} / {totalAttempted}</strong>
             </div>
           </div>
 
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'center' }}>
-            <button className="btn btn-primary" onClick={handleLoadNextBatch}>
-              <Zap size={18} />
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', justifyContent: 'center' }}>
+            <button className="btn btn-primary btn-sm" onClick={handleLoadNextBatch}>
+              <Zap size={16} />
               <span>Load Next Internet Batch</span>
             </button>
 
-            <button className="btn btn-outline" onClick={() => fetchQuestions(difficulty)}>
-              <RotateCcw size={18} />
+            <button className="btn btn-outline btn-sm" onClick={() => fetchQuestions(difficulty)}>
+              <RotateCcw size={16} />
               <span>Re-try Current Batch</span>
             </button>
           </div>
