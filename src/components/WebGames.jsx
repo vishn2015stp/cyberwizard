@@ -187,7 +187,7 @@ export const discoverableGamesPool = [
 ];
 
 // Vector Graphic Banner Generator for Game Cards
-function GameThumbnail({ game }) {
+function GameThumbnail({ game, isMostPlayed, playCount }) {
   const renderBanner = () => {
     switch (game.id) {
       case '3d-racer':
@@ -332,20 +332,63 @@ function GameThumbnail({ game }) {
       borderBottom: '1px solid var(--border)'
     }}>
       {renderBanner()}
+
+      {/* Most Played #1 Crown Badge */}
+      {isMostPlayed && (
+        <div style={{
+          position: 'absolute',
+          top: '10px',
+          left: '10px',
+          background: 'linear-gradient(135deg, #f59e0b, #ec4899)',
+          boxShadow: '0 0 15px rgba(245, 158, 11, 0.6)',
+          padding: '0.3rem 0.75rem',
+          borderRadius: '20px',
+          fontSize: '0.75rem',
+          fontWeight: 800,
+          color: '#ffffff',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.35rem',
+          letterSpacing: '0.5px'
+        }}>
+          <Flame size={14} className="text-white animate-pulse" />
+          <span>🔥 #1 MOST PLAYED</span>
+        </div>
+      )}
+
+      {/* Play Counter & Type Badge */}
       <div style={{
         position: 'absolute',
         bottom: '8px',
         right: '10px',
-        background: 'rgba(4,7,17,0.85)',
-        backdropFilter: 'blur(8px)',
-        padding: '0.25rem 0.65rem',
-        borderRadius: '12px',
-        fontSize: '0.72rem',
-        fontWeight: 700,
-        color: game.type.startsWith('native') ? 'var(--cyan)' : '#10b981',
-        border: game.type.startsWith('native') ? '1px solid var(--border-cyan)' : '1px solid #10b981'
+        display: 'flex',
+        gap: '0.4rem'
       }}>
-        {game.type.startsWith('native') ? '⚡ NATIVE CANVAS' : '🛡️ DOUBLE-CHECKED OK'}
+        <span style={{
+          background: 'rgba(245, 158, 11, 0.2)',
+          backdropFilter: 'blur(8px)',
+          padding: '0.25rem 0.6rem',
+          borderRadius: '12px',
+          fontSize: '0.72rem',
+          fontWeight: 700,
+          color: '#f59e0b',
+          border: '1px solid rgba(245, 158, 11, 0.4)'
+        }}>
+          🔥 {playCount} Plays
+        </span>
+
+        <span style={{
+          background: 'rgba(4,7,17,0.85)',
+          backdropFilter: 'blur(8px)',
+          padding: '0.25rem 0.65rem',
+          borderRadius: '12px',
+          fontSize: '0.72rem',
+          fontWeight: 700,
+          color: game.type.startsWith('native') ? 'var(--cyan)' : '#10b981',
+          border: game.type.startsWith('native') ? '1px solid var(--border-cyan)' : '1px solid #10b981'
+        }}>
+          {game.type.startsWith('native') ? '⚡ NATIVE CANVAS' : '🌐 WEBGL'}
+        </span>
       </div>
     </div>
   );
@@ -1099,6 +1142,29 @@ function NativeCyberPong() {
   );
 }
 
+// Initial Play Counts Helper for Sorting Most Played Games
+const getStoredPlayCounts = () => {
+  try {
+    const saved = localStorage.getItem('cyber_wizard_game_play_counts');
+    if (saved) return JSON.parse(saved);
+  } catch (e) {}
+  return {
+    '3d-racer': 48,
+    'snake': 38,
+    'hexgl': 32,
+    'native-breakout': 27,
+    '2048': 22,
+    'alien-invasion': 18,
+    'clumsy-bird': 14,
+    'sudoku': 11,
+    'track-not-found': 9,
+    'space-huggers': 7,
+    'native-pong': 6,
+    'bounce-back': 5,
+    'offline-runner': 4
+  };
+};
+
 export default function WebGames() {
   const [games, setGames] = useState(initialGamesList);
   const [pool, setPool] = useState(discoverableGamesPool);
@@ -1107,30 +1173,14 @@ export default function WebGames() {
   const [selectedGame, setSelectedGame] = useState(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  // Auto Game Search & Discovery Engine state
-  const [autoSearchActive, setAutoSearchActive] = useState(true);
-  const [isScanning, setIsScanning] = useState(false);
-  const [scanCountdown, setScanCountdown] = useState(10);
-  const [discoveredCount, setDiscoveredCount] = useState(0);
-  const [recentNotification, setRecentNotification] = useState(null);
-  const [discoveryLog, setDiscoveryLog] = useState([
-    '🛡️ Double-Check Verification Engine Active - All game URLs pre-tested for HTTP 200 OK.'
-  ]);
+  // Play count tracking for "Most Played Game on Top"
+  const [playCounts, setPlayCounts] = useState(getStoredPlayCounts);
 
   const stageContainerRef = useRef(null);
 
-  // Double-Check & Pre-Verify Scan Mechanism
-  const triggerAutoDiscoveryScan = () => {
-    setIsScanning(true);
-    const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-
-    setDiscoveryLog(prev => [
-      `[${now}] 🔍 Double-checking & verifying open-source game repository headers...`,
-      ...prev.slice(0, 4)
-    ]);
-
-    setTimeout(() => {
-      setIsScanning(false);
+  // Silent Background Auto-Discovery Loop (No Telemetry Box Rendered)
+  useEffect(() => {
+    const timer = setInterval(() => {
       setPool(prevPool => {
         if (prevPool.length > 0) {
           const nextGame = prevPool[0];
@@ -1140,47 +1190,26 @@ export default function WebGames() {
             isAutoDiscovered: true,
             verifiedStatus: nextGame.verifiedStatus || 'HTTP 200 VERIFIED'
           };
-
           setGames(prevGames => [autoDiscoveredGame, ...prevGames]);
-          setDiscoveredCount(c => c + 1);
-          setRecentNotification(`✨ DOUBLE-CHECKED & VERIFIED: "${nextGame.title}" auto-added to Library!`);
-
-          setDiscoveryLog(prev => [
-            `[${now}] 🛡️ VERIFIED & ADDED (HTTP 200 OK): "${nextGame.title}" (${nextGame.category})`,
-            ...prev.slice(0, 4)
-          ]);
-
-          setTimeout(() => setRecentNotification(null), 5000);
           return remainingPool;
-        } else {
-          setDiscoveryLog(prev => [
-            `[${now}] 🛡️ Verification Complete: All active games double-checked. 0% 404 error risk.`,
-            ...prev.slice(0, 4)
-          ]);
-          return prevPool;
         }
+        return prevPool;
       });
-    }, 1500);
-  };
-
-  // Periodic Auto-Search Loop
-  useEffect(() => {
-    if (!autoSearchActive) return;
-
-    const timer = setInterval(() => {
-      setScanCountdown(prev => {
-        if (prev <= 1) {
-          triggerAutoDiscoveryScan();
-          return 10;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+    }, 12000);
 
     return () => clearInterval(timer);
-  }, [autoSearchActive, pool]);
+  }, []);
 
-  const filteredGames = games.filter(g => {
+  // Sort games dynamically so Most Played Game is ALWAYS on Top!
+  const sortedGames = [...games].sort((a, b) => {
+    const countA = playCounts[a.id] || 0;
+    const countB = playCounts[b.id] || 0;
+    return countB - countA;
+  });
+
+  const mostPlayedGameId = sortedGames.length > 0 ? sortedGames[0].id : null;
+
+  const filteredGames = sortedGames.filter(g => {
     const matchesCat = selectedCategory === 'all' || g.category === selectedCategory;
     const matchesSearch = g.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           g.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -1189,6 +1218,16 @@ export default function WebGames() {
   });
 
   const handleSelectGame = (game) => {
+    // Increment play count & save to localStorage
+    const updatedCounts = {
+      ...playCounts,
+      [game.id]: (playCounts[game.id] || 0) + 1
+    };
+    setPlayCounts(updatedCounts);
+    try {
+      localStorage.setItem('cyber_wizard_game_play_counts', JSON.stringify(updatedCounts));
+    } catch (e) {}
+
     setSelectedGame(game);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -1255,16 +1294,12 @@ export default function WebGames() {
                 <Flame size={14} className="text-pink" />
                 <span>ELECTRO GAMING ARCADE</span>
               </span>
-              <span className="badge badge-purple" style={{ padding: '0.35rem 0.85rem' }}>
-                <ShieldCheck size={14} className="text-green" />
-                <span>DOUBLE-CHECKED & PRE-VERIFIED</span>
-              </span>
             </div>
             <h2 style={{ fontSize: '2.2rem', fontWeight: 800, letterSpacing: '-0.5px' }}>
               {selectedGame ? selectedGame.title : <>Open-Source <span className="text-cyan glow-cyan">3D & Arcade Games</span></>}
             </h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginTop: '0.25rem' }}>
-              High-performance WebGL 3D racers, retro arcade classics, space shooters, and pre-verified 100% working games.
+              High-performance WebGL 3D racers, retro arcade classics, space shooters, sorted dynamically by popularity.
             </p>
           </div>
 
@@ -1283,122 +1318,6 @@ export default function WebGames() {
           </div>
         </div>
       </div>
-
-      {/* AUTOMATIC PRE-VERIFICATION SEARCH ENGINE CONTROL BAR */}
-      {!selectedGame && (
-        <div 
-          className="glass-card" 
-          style={{ 
-            padding: '1rem 1.5rem', 
-            marginBottom: '1.5rem', 
-            background: 'rgba(6, 12, 26, 0.85)',
-            border: '1px solid var(--border-purple)',
-            boxShadow: '0 0 20px rgba(168, 85, 247, 0.15)'
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Radio size={22} className={isScanning ? 'text-pink animate-pulse' : 'text-cyan'} />
-                {autoSearchActive && (
-                  <span style={{
-                    position: 'absolute',
-                    top: '-2px',
-                    right: '-2px',
-                    width: '8px',
-                    height: '8px',
-                    borderRadius: '50%',
-                    background: '#10b981',
-                    boxShadow: '0 0 8px #10b981'
-                  }} />
-                )}
-              </div>
-
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                  <strong style={{ fontSize: '0.95rem', color: 'var(--text-main)', letterSpacing: '0.5px' }}>
-                    🛡️ DOUBLE-CHECK & PRE-VERIFICATION GAME ENGINE
-                  </strong>
-                  <span className="badge badge-cyan" style={{ fontSize: '0.7rem' }}>
-                    {games.length} GAMES IN LIBRARY ({discoveredCount} AUTO-ADDED)
-                  </span>
-                </div>
-
-                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
-                  {isScanning ? (
-                    <span className="text-pink fw-bold">🔍 Pre-verifying HTTP 200 header response before adding...</span>
-                  ) : autoSearchActive ? (
-                    <span>Auto-Verification: <strong className="text-green">ONLINE</strong> | Next check in: <strong className="text-cyan">{scanCountdown}s</strong></span>
-                  ) : (
-                    <span className="text-muted">Auto-Verification: <strong>PAUSED</strong></span>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <button 
-                className={`btn btn-sm ${isScanning ? 'btn-secondary' : 'btn-outline'}`}
-                onClick={triggerAutoDiscoveryScan}
-                disabled={isScanning}
-              >
-                <RefreshCw size={14} className={isScanning ? 'spin' : ''} />
-                <span>{isScanning ? 'Verifying...' : '⚡ Pre-Verify & Scan'}</span>
-              </button>
-
-              <button 
-                className={`btn btn-sm ${autoSearchActive ? 'btn-primary' : 'btn-secondary'}`}
-                onClick={() => setAutoSearchActive(!autoSearchActive)}
-              >
-                <span>{autoSearchActive ? 'Auto-Scan: ON' : 'Auto-Scan: OFF'}</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Real-time Discovery Log Ticker */}
-          <div style={{ 
-            marginTop: '0.75rem', 
-            padding: '0.5rem 0.85rem', 
-            background: 'rgba(3, 6, 15, 0.7)', 
-            borderRadius: 'var(--radius-sm)', 
-            fontSize: '0.78rem',
-            fontFamily: 'monospace',
-            color: 'var(--text-dim)',
-            border: '1px solid rgba(255,255,255,0.05)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis'
-          }}>
-            <ShieldCheck size={13} className="text-green" />
-            <span>{discoveryLog[0]}</span>
-          </div>
-        </div>
-      )}
-
-      {/* AUTO DISCOVERY TOAST NOTIFICATION */}
-      {recentNotification && (
-        <div style={{
-          marginBottom: '1.5rem',
-          padding: '0.85rem 1.25rem',
-          borderRadius: 'var(--radius-sm)',
-          background: 'linear-gradient(90deg, rgba(16, 185, 129, 0.25), rgba(0, 243, 255, 0.25))',
-          border: '1px solid #10b981',
-          boxShadow: '0 0 20px rgba(16, 185, 129, 0.3)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.75rem',
-          color: '#ffffff',
-          fontWeight: 600,
-          fontSize: '0.92rem',
-          animation: 'fadeIn 0.3s ease-in'
-        }}>
-          <ShieldCheck size={18} className="text-green animate-bounce" />
-          <span>{recentNotification}</span>
-        </div>
-      )}
 
       {/* VIEW 1: HIGH-OCTANE GAME CATALOG GRID WITH THUMBNAILS */}
       {!selectedGame ? (
@@ -1437,57 +1356,67 @@ export default function WebGames() {
             </div>
           </div>
 
-          {/* Gaming Cards Grid */}
+          {/* Gaming Cards Grid (Most Played Games Always on Top) */}
           <div className="grid-3">
-            {filteredGames.map((game) => (
-              <div 
-                key={game.id} 
-                className="glass-card" 
-                style={{ 
-                  padding: 0, 
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  justify: 'space-between',
-                  cursor: 'pointer',
-                  overflow: 'hidden',
-                  border: '1px solid var(--border)'
-                }}
-                onClick={() => handleSelectGame(game)}
-              >
-                <div>
-                  {/* Game Thumbnail Banner */}
-                  <GameThumbnail game={game} />
+            {filteredGames.map((game) => {
+              const count = playCounts[game.id] || 0;
+              const isTopGame = game.id === mostPlayedGameId;
 
-                  <div style={{ padding: '1.25rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                      <span className="badge badge-purple" style={{ fontSize: '0.72rem' }}>{game.category}</span>
-                      <span className="badge badge-cyan" style={{ fontSize: '0.72rem' }}>
-                        {game.type.startsWith('native') ? 'NATIVE CANVAS' : 'WEBGL 3D'}
-                      </span>
+              return (
+                <div 
+                  key={game.id} 
+                  className="glass-card" 
+                  style={{ 
+                    padding: 0, 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    justify: 'space-between',
+                    cursor: 'pointer',
+                    overflow: 'hidden',
+                    border: isTopGame ? '2px solid #f59e0b' : '1px solid var(--border)',
+                    boxShadow: isTopGame ? '0 0 25px rgba(245, 158, 11, 0.25)' : 'none'
+                  }}
+                  onClick={() => handleSelectGame(game)}
+                >
+                  <div>
+                    {/* Game Thumbnail Banner */}
+                    <GameThumbnail 
+                      game={game} 
+                      isMostPlayed={isTopGame} 
+                      playCount={count} 
+                    />
+
+                    <div style={{ padding: '1.25rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                        <span className="badge badge-purple" style={{ fontSize: '0.72rem' }}>{game.category}</span>
+                        <span className="badge badge-cyan" style={{ fontSize: '0.72rem' }}>
+                          {game.type.startsWith('native') ? 'NATIVE CANVAS' : 'WEBGL 3D'}
+                        </span>
+                      </div>
+
+                      <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '0.4rem', color: 'var(--text-main)' }}>
+                        {game.title}
+                      </h3>
+
+                      <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '1rem' }}>
+                        {game.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div style={{ padding: '0 1.25rem 1.25rem 1.25rem' }}>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)', marginBottom: '0.85rem' }}>
+                      Developer: <strong className="text-cyan">{game.author}</strong>
                     </div>
 
-                    <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '0.4rem', color: 'var(--text-main)' }}>
-                      {game.title}
-                    </h3>
-
-                    <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '1rem' }}>
-                      {game.description}
-                    </p>
+                    <button className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
+                      <Play size={16} />
+                      <span>PLAY NOW</span>
+                    </button>
                   </div>
                 </div>
-
-                <div style={{ padding: '0 1.25rem 1.25rem 1.25rem' }}>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)', marginBottom: '0.85rem' }}>
-                    Developer: <strong className="text-cyan">{game.author}</strong>
-                  </div>
-
-                  <button className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
-                    <Play size={16} />
-                    <span>PLAY NOW</span>
-                  </button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       ) : (
