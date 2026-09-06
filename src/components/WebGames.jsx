@@ -10,8 +10,9 @@ import {
   ArrowLeft,
   Sparkles,
   Zap,
-  CheckCircle2,
-  Car
+  Flame,
+  Trophy,
+  ShieldAlert
 } from 'lucide-react';
 
 export const gameCategories = [
@@ -123,6 +124,184 @@ export const gamesList = [
   }
 ];
 
+// Vector Graphic Banner Generator for Game Cards
+function GameThumbnail({ game }) {
+  const renderBanner = () => {
+    switch (game.id) {
+      case '3d-racer':
+        return (
+          <svg viewBox="0 0 400 200" style={{ width: '100%', height: '100%', display: 'block' }}>
+            <defs>
+              <linearGradient id="racerBg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#0a051b" />
+                <stop offset="50%" stopColor="#1a0b36" />
+                <stop offset="100%" stopColor="#040914" />
+              </linearGradient>
+              <linearGradient id="sunGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#ec4899" />
+                <stop offset="100%" stopColor="#f59e0b" />
+              </linearGradient>
+            </defs>
+            <rect width="400" height="200" fill="url(#racerBg)" />
+            <circle cx="200" cy="110" r="45" fill="url(#sunGrad)" opacity="0.85" />
+            <line x1="0" y1="110" x2="400" y2="110" stroke="#ec4899" strokeWidth="2" opacity="0.6" />
+            <path d="M 0 200 L 200 110 L 400 200" fill="#0d1322" stroke="#00f3ff" strokeWidth="2" />
+            <line x1="200" y1="110" x2="200" y2="200" stroke="#f59e0b" strokeWidth="3" strokeDasharray="8 8" />
+            <line x1="200" y1="110" x2="100" y2="200" stroke="rgba(168,85,247,0.5)" strokeWidth="1.5" />
+            <line x1="200" y1="110" x2="300" y2="200" stroke="rgba(168,85,247,0.5)" strokeWidth="1.5" />
+            <rect x="175" y="160" width="50" height="25" rx="4" fill="#00f3ff" />
+            <rect x="183" y="164" width="34" height="10" fill="#040711" />
+            <circle cx="182" cy="180" r="3" fill="#ec4899" />
+            <circle cx="218" cy="180" r="3" fill="#ec4899" />
+          </svg>
+        );
+
+      case 'hexgl':
+        return (
+          <svg viewBox="0 0 400 200" style={{ width: '100%', height: '100%', display: 'block' }}>
+            <defs>
+              <linearGradient id="hexBg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#0f172a" />
+                <stop offset="100%" stopColor="#1e1b4b" />
+              </linearGradient>
+            </defs>
+            <rect width="400" height="200" fill="url(#hexBg)" />
+            <polygon points="200,30 260,65 260,135 200,170 140,135 140,65" fill="none" stroke="#00f3ff" strokeWidth="3.5" opacity="0.8" />
+            <path d="M 120 160 L 200 70 L 280 160 Z" fill="rgba(168,85,247,0.35)" stroke="#a855f7" strokeWidth="2.5" />
+            <circle cx="200" cy="70" r="8" fill="#00f3ff" />
+            <text x="200" y="190" textAnchor="middle" fill="#00f3ff" fontSize="13" fontWeight="800" letterSpacing="3">3D SCI-FI RACER</text>
+          </svg>
+        );
+
+      case 'slowroads':
+        return (
+          <svg viewBox="0 0 400 200" style={{ width: '100%', height: '100%', display: 'block' }}>
+            <rect width="400" height="200" fill="#06121e" />
+            <path d="M 0 130 Q 100 80 200 130 T 400 130 L 400 200 L 0 200 Z" fill="#10b981" opacity="0.35" />
+            <path d="M 50 200 Q 200 90 350 200" fill="none" stroke="#f59e0b" strokeWidth="24" strokeLinecap="round" />
+            <path d="M 50 200 Q 200 90 350 200" fill="none" stroke="#ffffff" strokeWidth="2" strokeDasharray="8 8" />
+            <text x="200" y="50" textAnchor="middle" fill="#10b981" fontSize="14" fontWeight="800" letterSpacing="2">3D PROCEDURAL ROAD</text>
+          </svg>
+        );
+
+      case 'snake':
+        return (
+          <svg viewBox="0 0 400 200" style={{ width: '100%', height: '100%', display: 'block' }}>
+            <rect width="400" height="200" fill="#040914" />
+            <path d="M 0 50 H 400 M 0 100 H 400 M 0 150 H 400 M 100 0 V 200 M 200 0 V 200 M 300 0 V 200" stroke="rgba(0,243,255,0.08)" strokeWidth="1" />
+            <rect x="90" y="80" width="35" height="35" fill="#00f3ff" rx="4" />
+            <rect x="130" y="80" width="35" height="35" fill="rgba(0,243,255,0.75)" rx="4" />
+            <rect x="170" y="80" width="35" height="35" fill="rgba(0,243,255,0.5)" rx="4" />
+            <rect x="170" y="120" width="35" height="35" fill="rgba(0,243,255,0.3)" rx="4" />
+            <circle cx="280" cy="97" r="14" fill="#ec4899" />
+            <text x="200" y="185" textAnchor="middle" fill="#ec4899" fontSize="13" fontWeight="800" letterSpacing="2">CYBER SNAKE ARCADE</text>
+          </svg>
+        );
+
+      case 'hextris':
+        return (
+          <svg viewBox="0 0 400 200" style={{ width: '100%', height: '100%', display: 'block' }}>
+            <rect width="400" height="200" fill="#090514" />
+            <polygon points="200,35 255,67 255,133 200,165 145,133 145,67" fill="none" stroke="#a855f7" strokeWidth="4" />
+            <polygon points="200,55 235,75 235,125 200,145 165,125 165,75" fill="#a855f7" opacity="0.4" />
+            <polygon points="200,75 218,85 218,115 200,125 182,115 182,85" fill="#00f3ff" />
+          </svg>
+        );
+
+      case '2048':
+        return (
+          <svg viewBox="0 0 400 200" style={{ width: '100%', height: '100%', display: 'block' }}>
+            <rect width="400" height="200" fill="#1e102a" />
+            <rect x="100" y="45" width="55" height="55" rx="6" fill="#f59e0b" />
+            <text x="127" y="80" textAnchor="middle" fill="#fff" fontSize="18" fontWeight="800">512</text>
+
+            <rect x="172" y="45" width="55" height="55" rx="6" fill="#ec4899" />
+            <text x="199" y="80" textAnchor="middle" fill="#fff" fontSize="18" fontWeight="800">1024</text>
+
+            <rect x="245" y="45" width="55" height="55" rx="6" fill="#00f3ff" />
+            <text x="272" y="80" textAnchor="middle" fill="#040914" fontSize="18" fontWeight="800">2048</text>
+          </svg>
+        );
+
+      case 'alien-invasion':
+        return (
+          <svg viewBox="0 0 400 200" style={{ width: '100%', height: '100%', display: 'block' }}>
+            <rect width="400" height="200" fill="#030712" />
+            <circle cx="80" cy="40" r="1.5" fill="#fff" />
+            <circle cx="280" cy="60" r="2" fill="#fff" />
+            <circle cx="340" cy="140" r="1.5" fill="#fff" />
+            {/* Alien Invader */}
+            <rect x="180" y="40" width="40" height="20" rx="4" fill="#ec4899" />
+            <rect x="190" y="60" width="20" height="10" fill="#ec4899" />
+            {/* Player Starfighter */}
+            <polygon points="200,130 180,170 220,170" fill="#00f3ff" />
+            <line x1="200" y1="130" x2="200" y2="70" stroke="#f59e0b" strokeWidth="3" />
+          </svg>
+        );
+
+      case 'clumsy-bird':
+        return (
+          <svg viewBox="0 0 400 200" style={{ width: '100%', height: '100%', display: 'block' }}>
+            <rect width="400" height="200" fill="#061a24" />
+            <rect x="260" y="0" width="40" height="80" fill="#10b981" rx="4" />
+            <rect x="260" y="130" width="40" height="70" fill="#10b981" rx="4" />
+            <circle cx="140" cy="100" r="18" fill="#f59e0b" />
+            <circle cx="150" cy="95" r="5" fill="#fff" />
+            <polygon points="158,100 175,103 158,108" fill="#ec4899" />
+          </svg>
+        );
+
+      case 'pacman':
+        return (
+          <svg viewBox="0 0 400 200" style={{ width: '100%', height: '100%', display: 'block' }}>
+            <rect width="400" height="200" fill="#040711" />
+            <path d="M 120 100 L 160 80 A 30 30 0 1 1 160 120 Z" fill="#f59e0b" />
+            <circle cx="200" cy="100" r="6" fill="#00f3ff" />
+            <circle cx="230" cy="100" r="6" fill="#00f3ff" />
+            <rect x="270" y="80" width="30" height="35" rx="10" fill="#ec4899" />
+          </svg>
+        );
+
+      default:
+        return (
+          <svg viewBox="0 0 400 200" style={{ width: '100%', height: '100%', display: 'block' }}>
+            <rect width="400" height="200" fill="#080e1e" />
+            <circle cx="200" cy="100" r="45" fill="rgba(0,243,255,0.1)" stroke="#00f3ff" strokeWidth="2.5" />
+            <path d="M 188 85 L 222 100 L 188 115 Z" fill="#00f3ff" />
+          </svg>
+        );
+    }
+  };
+
+  return (
+    <div style={{
+      width: '100%',
+      height: '160px',
+      overflow: 'hidden',
+      position: 'relative',
+      background: '#040711',
+      borderBottom: '1px solid var(--border)'
+    }}>
+      {renderBanner()}
+      <div style={{
+        position: 'absolute',
+        bottom: '8px',
+        right: '10px',
+        background: 'rgba(4,7,17,0.85)',
+        backdropFilter: 'blur(8px)',
+        padding: '0.25rem 0.65rem',
+        borderRadius: '12px',
+        fontSize: '0.72rem',
+        fontWeight: 700,
+        color: 'var(--cyan)',
+        border: '1px solid var(--border-cyan)'
+      }}>
+        {game.type.startsWith('native') ? '⚡ NATIVE ENGINE' : '🌐 WEBGL HARDWARE'}
+      </div>
+    </div>
+  );
+}
+
 // Built-in Native Cyber 3D Highway Racer Component
 function NativeCyberRacer3D() {
   const canvasRef = useRef(null);
@@ -188,7 +367,6 @@ function NativeCyberRacer3D() {
       ctx.fillStyle = '#060913';
       ctx.fillRect(0, 0, width, height);
 
-      // Sunset Background & Stars
       ctx.fillStyle = 'rgba(0, 243, 255, 0.05)';
       ctx.fillRect(0, 0, width, height / 2);
 
@@ -199,7 +377,6 @@ function NativeCyberRacer3D() {
       ctx.fillStyle = grad;
       ctx.fillRect(0, horizonY - 60, width, 60);
 
-      // 3D Perspective Road
       const totalLanes = 30;
       for (let n = totalLanes; n > 0; n--) {
         const z1 = n * 40;
@@ -234,7 +411,6 @@ function NativeCyberRacer3D() {
         }
       }
 
-      // Traffic Cars
       traffic.forEach((car) => {
         car.z -= speedVal * 6 - car.speed;
         if (car.z < 50) {
@@ -262,7 +438,6 @@ function NativeCyberRacer3D() {
         }
       });
 
-      // Player Sportscar
       const playerW = 80;
       const playerH = 40;
       const playerY = height - 60;
@@ -568,44 +743,64 @@ export default function WebGames() {
   }, []);
 
   return (
-    <section style={{ maxWidth: '1200px', margin: '0 auto' }}>
-      {/* Page Header */}
-      <div style={{ marginBottom: '1.5rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '0.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <Gamepad2 className="text-cyan" size={28} />
-            <h2 style={{ fontSize: '1.8rem', fontWeight: 800 }}>
-              {selectedGame ? selectedGame.title : <>Open-Source <span className="text-cyan">Games Library</span></>}
+    <section style={{ maxWidth: '1280px', margin: '0 auto' }}>
+      {/* High-Octane Gaming Banner Header */}
+      <div 
+        className="glass-card" 
+        style={{ 
+          padding: '1.75rem 2rem', 
+          marginBottom: '2rem',
+          background: 'linear-gradient(135deg, rgba(13,20,38,0.9), rgba(15,9,30,0.9))',
+          border: '1px solid var(--border-cyan)',
+          boxShadow: '0 0 30px rgba(0, 243, 255, 0.12)',
+          position: 'relative',
+          overflow: 'hidden'
+        }}
+      >
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '3px',
+          background: 'linear-gradient(90deg, var(--cyan), var(--purple), var(--pink))'
+        }} />
+
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1.25rem' }}>
+          <div>
+            <div className="badge badge-cyan" style={{ marginBottom: '0.75rem', padding: '0.35rem 0.85rem' }}>
+              <Flame size={14} className="text-pink" />
+              <span>ELECTRO GAMING ARCADE</span>
+            </div>
+            <h2 style={{ fontSize: '2.2rem', fontWeight: 800, letterSpacing: '-0.5px' }}>
+              {selectedGame ? selectedGame.title : <>Open-Source <span className="text-cyan glow-cyan">3D & Arcade Games</span></>}
             </h2>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginTop: '0.25rem' }}>
+              High-performance WebGL 3D racers, retro arcade classics, space shooters, and logic puzzles.
+            </p>
           </div>
 
-          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
             {selectedGame && (
-              <button className="btn btn-outline btn-sm" onClick={() => setSelectedGame(null)}>
+              <button className="btn btn-outline" onClick={() => setSelectedGame(null)}>
                 <ArrowLeft size={16} />
-                <span>Back to Games Library</span>
+                <span>Back to Catalog</span>
               </button>
             )}
 
-            <button className="btn btn-secondary btn-sm" onClick={handleRandomGame}>
-              <Shuffle size={15} />
+            <button className="btn btn-primary" onClick={handleRandomGame}>
+              <Shuffle size={16} />
               <span>🎲 Surprise Me (Random Game)</span>
             </button>
           </div>
         </div>
-
-        {!selectedGame && (
-          <p style={{ color: 'var(--text-muted)' }}>
-            Select any open-source game below to launch the playable arcade stage in true full screen!
-          </p>
-        )}
       </div>
 
-      {/* VIEW 1: GAME LIBRARY GRID (SHOW FIRST BEFORE SELECTING A GAME) */}
+      {/* VIEW 1: HIGH-OCTANE GAME CATALOG GRID WITH THUMBNAILS */}
       {!selectedGame ? (
         <div>
           {/* Controls Bar: Categories & Search */}
-          <div style={{ marginBottom: '1.75rem' }}>
+          <div style={{ marginBottom: '2rem' }}>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center', justifyContent: 'space-between' }}>
               
               {/* Category Pills */}
@@ -614,24 +809,23 @@ export default function WebGames() {
                   <button
                     key={cat.id}
                     onClick={() => setSelectedCategory(cat.id)}
-                    className={`btn btn-sm ${selectedCategory === cat.id ? 'btn-primary' : 'btn-outline'}`}
+                    className={`btn ${selectedCategory === cat.id ? 'btn-primary' : 'btn-outline'}`}
                   >
                     <span>{cat.label}</span>
                   </button>
                 ))}
               </div>
 
-              {/* Search Input */}
-              <div style={{ minWidth: '220px', maxWidth: '280px', width: '100%' }}>
+              {/* Search Box */}
+              <div style={{ minWidth: '240px', maxWidth: '300px', width: '100%' }}>
                 <div className="search-box">
                   <Search className="search-icon" size={16} />
                   <input 
                     type="text"
                     className="search-input"
-                    placeholder="Search games catalog..."
+                    placeholder="Search games..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    style={{ padding: '0.45rem 0.85rem 0.45rem 2.4rem', fontSize: '0.85rem' }}
                   />
                 </div>
               </div>
@@ -639,47 +833,53 @@ export default function WebGames() {
             </div>
           </div>
 
-          {/* Library Cards Grid */}
+          {/* Gaming Cards Grid */}
           <div className="grid-3">
             {filteredGames.map((game) => (
               <div 
                 key={game.id} 
                 className="glass-card" 
                 style={{ 
-                  padding: '1.5rem', 
+                  padding: 0, 
                   display: 'flex', 
                   flexDirection: 'column', 
                   justify: 'space-between',
                   cursor: 'pointer',
+                  overflow: 'hidden',
                   border: '1px solid var(--border)'
                 }}
                 onClick={() => handleSelectGame(game)}
               >
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
-                    <span className="badge badge-purple" style={{ fontSize: '0.75rem' }}>{game.category}</span>
-                    <span className="badge badge-cyan" style={{ fontSize: '0.7rem' }}>
-                      {game.type.startsWith('native') ? 'Native Canvas' : 'Verified WebGL'}
-                    </span>
+                  {/* Game Thumbnail Banner */}
+                  <GameThumbnail game={game} />
+
+                  <div style={{ padding: '1.25rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                      <span className="badge badge-purple" style={{ fontSize: '0.72rem' }}>{game.category}</span>
+                      <span className="badge badge-cyan" style={{ fontSize: '0.72rem' }}>
+                        {game.type.startsWith('native') ? 'NATIVE CANVAS' : 'WEBGL 3D'}
+                      </span>
+                    </div>
+
+                    <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '0.4rem', color: 'var(--text-main)' }}>
+                      {game.title}
+                    </h3>
+
+                    <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '1rem' }}>
+                      {game.description}
+                    </p>
                   </div>
-
-                  <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-main)' }}>
-                    {game.title}
-                  </h3>
-
-                  <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '1.25rem' }}>
-                    {game.description}
-                  </p>
                 </div>
 
-                <div>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)', marginBottom: '1rem' }}>
+                <div style={{ padding: '0 1.25rem 1.25rem 1.25rem' }}>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)', marginBottom: '0.85rem' }}>
                     Developer: <strong className="text-cyan">{game.author}</strong>
                   </div>
 
-                  <button className="btn btn-primary btn-sm" style={{ width: '100%', justifyContent: 'center' }}>
+                  <button className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
                     <Play size={16} />
-                    <span>Play Game</span>
+                    <span>PLAY NOW</span>
                   </button>
                 </div>
               </div>
@@ -689,7 +889,6 @@ export default function WebGames() {
       ) : (
         /* VIEW 2: PLAY STAGE SCREEN (OPENED AFTER SELECTING A GAME) */
         <div>
-          {/* Game Stage Screen Container */}
           <div 
             ref={stageContainerRef}
             className="glass-card"
@@ -709,17 +908,17 @@ export default function WebGames() {
               justify: 'space-between'
             }}
           >
-            {/* Stage Header (Shown when not fullscreen) */}
+            {/* Stage Header */}
             {!isFullscreen && (
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.75rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                   <button className="btn btn-outline btn-sm" onClick={() => setSelectedGame(null)}>
                     <ArrowLeft size={15} />
-                    <span>Back to Library</span>
+                    <span>Back to Catalog</span>
                   </button>
                   <div>
                     <span className="badge badge-purple" style={{ fontSize: '0.75rem' }}>{selectedGame.category}</span>
-                    <h3 style={{ fontSize: '1.2rem', fontWeight: 700, display: 'inline', marginLeft: '0.5rem' }}>{selectedGame.title}</h3>
+                    <h3 style={{ fontSize: '1.2rem', fontWeight: 800, display: 'inline', marginLeft: '0.5rem' }}>{selectedGame.title}</h3>
                   </div>
                 </div>
 
@@ -758,7 +957,7 @@ export default function WebGames() {
                 <button 
                   className="btn btn-primary btn-sm" 
                   onClick={toggleFullscreen}
-                  style={{ opacity: 0.85, boxShadow: '0 0 15px rgba(0,0,0,0.8)' }}
+                  style={{ opacity: 0.9, boxShadow: '0 0 20px rgba(0,0,0,0.9)' }}
                 >
                   <Minimize2 size={16} />
                   <span>Exit Fullscreen</span>
@@ -766,7 +965,7 @@ export default function WebGames() {
               </div>
             )}
 
-            {/* Main Game Render Frame (Guaranteed 0% 404 Error Risk) */}
+            {/* Main Game Stage Render Frame */}
             <div style={{
               width: '100%',
               height: isFullscreen ? '100vh' : '580px',
@@ -798,7 +997,7 @@ export default function WebGames() {
               )}
             </div>
 
-            {/* Stage Footer (Shown when not fullscreen) */}
+            {/* Stage Footer */}
             {!isFullscreen && (
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem', flexWrap: 'wrap', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
                 <div>{selectedGame.description}</div>
