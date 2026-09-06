@@ -265,8 +265,8 @@ function GameThumbnail({ game, isMostPlayed, playCount }) {
     }}>
       {renderBanner()}
 
-      {/* Most Played #1 Crown Badge */}
-      {isMostPlayed && (
+      {/* Most Played #1 Badge (Only shown if real playCount > 0) */}
+      {isMostPlayed && playCount > 0 && (
         <div style={{
           position: 'absolute',
           top: '10px',
@@ -287,7 +287,7 @@ function GameThumbnail({ game, isMostPlayed, playCount }) {
         </div>
       )}
 
-      {/* Play Counter & Type Badge */}
+      {/* Real Play Counter & Type Badge */}
       <div style={{
         position: 'absolute',
         bottom: '8px',
@@ -296,16 +296,16 @@ function GameThumbnail({ game, isMostPlayed, playCount }) {
         gap: '0.4rem'
       }}>
         <span style={{
-          background: 'rgba(245, 158, 11, 0.2)',
+          background: playCount > 0 ? 'rgba(245, 158, 11, 0.2)' : 'rgba(255, 255, 255, 0.05)',
           backdropFilter: 'blur(8px)',
           padding: '0.25rem 0.6rem',
           borderRadius: '12px',
           fontSize: '0.72rem',
           fontWeight: 700,
-          color: '#f59e0b',
-          border: '1px solid rgba(245, 158, 11, 0.4)'
+          color: playCount > 0 ? '#f59e0b' : 'var(--text-dim)',
+          border: playCount > 0 ? '1px solid rgba(245, 158, 11, 0.4)' : '1px solid rgba(255, 255, 255, 0.1)'
         }}>
-          🔥 {playCount} Plays
+          🔥 {playCount} {playCount === 1 ? 'Play' : 'Plays'}
         </span>
 
         <span style={{
@@ -1341,27 +1341,13 @@ function NativeCyberPong() {
   );
 }
 
-// Initial Play Counts Helper for Sorting Most Played Games
+// Initial Real Play Counts Helper (Starts empty, only tracks actual user plays)
 const getStoredPlayCounts = () => {
   try {
     const saved = localStorage.getItem('cyber_wizard_game_play_counts');
     if (saved) return JSON.parse(saved);
   } catch (e) {}
-  return {
-    '3d-racer': 48,
-    'snake': 38,
-    'hexgl': 32,
-    'native-breakout': 27,
-    '2048': 22,
-    'alien-invasion': 18,
-    'clumsy-bird': 14,
-    'sudoku': 11,
-    'track-not-found': 9,
-    'space-huggers': 7,
-    'native-pong': 6,
-    'bounce-back': 5,
-    'offline-runner': 4
-  };
+  return {}; // Pure 100% real play counts only
 };
 
 export default function WebGames() {
@@ -1372,7 +1358,7 @@ export default function WebGames() {
   const [selectedGame, setSelectedGame] = useState(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  // Play count tracking for "Most Played Game on Top"
+  // Pure Real Play count tracking
   const [playCounts, setPlayCounts] = useState(getStoredPlayCounts);
 
   const stageContainerRef = useRef(null);
@@ -1398,14 +1384,17 @@ export default function WebGames() {
     return () => clearInterval(timer);
   }, []);
 
-  // Sort games dynamically so Most Played Game is ALWAYS on Top!
+  // Sort games dynamically so Real Most Played Game is ALWAYS on Top!
   const sortedGames = [...games].sort((a, b) => {
     const countA = playCounts[a.id] || 0;
     const countB = playCounts[b.id] || 0;
     return countB - countA;
   });
 
-  const mostPlayedGameId = sortedGames.length > 0 ? sortedGames[0].id : null;
+  const maxPlayCount = Object.values(playCounts).reduce((max, val) => Math.max(max, val), 0);
+  const mostPlayedGameId = maxPlayCount > 0 && sortedGames.length > 0 && (playCounts[sortedGames[0].id] || 0) > 0 
+    ? sortedGames[0].id 
+    : null;
 
   const filteredGames = sortedGames.filter(g => {
     const matchesCat = selectedCategory === 'all' || g.category === selectedCategory;
@@ -1416,6 +1405,7 @@ export default function WebGames() {
   });
 
   const handleSelectGame = (game) => {
+    // Record REAL user play count
     const updatedCounts = {
       ...playCounts,
       [game.id]: (playCounts[game.id] || 0) + 1
@@ -1500,7 +1490,7 @@ export default function WebGames() {
               {selectedGame ? selectedGame.title : <>Open-Source <span className="text-cyan glow-cyan">3D & Arcade Games</span></>}
             </h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '0.2rem' }}>
-              Optimized for mobile touchscreens & desktop keyboards. Most played games sorted on top.
+              High-performance WebGL 3D racers, retro arcade classics, space shooters, sorted by real player views.
             </p>
           </div>
 
@@ -1557,7 +1547,7 @@ export default function WebGames() {
             </div>
           </div>
 
-          {/* Gaming Cards Grid (Most Played Games Always on Top) */}
+          {/* Gaming Cards Grid (Real Most Played Games Always on Top) */}
           <div className="grid-3">
             {filteredGames.map((game) => {
               const count = playCounts[game.id] || 0;
