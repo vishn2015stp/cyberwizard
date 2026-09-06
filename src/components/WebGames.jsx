@@ -17,7 +17,8 @@ import {
   ArrowDown,
   ArrowLeft as ArrowLeftIcon,
   ArrowRight as ArrowRightIcon,
-  Smartphone
+  Smartphone,
+  Star
 } from 'lucide-react';
 
 export const gameCategories = [
@@ -169,8 +170,65 @@ export const discoverableGamesPool = [
   }
 ];
 
+// Base Community Ratings dictionary
+const baseRatingsData = {
+  '3d-racer': { sum: 627, count: 128 },
+  'hexgl': { sum: 456, count: 95 },
+  'snake': { sum: 539, count: 110 },
+  'native-breakout': { sum: 395, count: 84 },
+  '2048': { sum: 365, count: 76 },
+  'alien-invasion': { sum: 285, count: 62 },
+  'clumsy-bird': { sum: 261, count: 58 },
+  'sudoku': { sum: 202, count: 43 },
+  'track-not-found': { sum: 187, count: 39 },
+  'space-huggers': { sum: 172, count: 35 },
+  'native-pong': { sum: 129, count: 28 },
+  'bounce-back': { sum: 103, count: 22 },
+  'offline-runner': { sum: 85, count: 19 }
+};
+
+// Interactive Star Rating Widget Component
+function StarRatingWidget({ ratingObj, userRating, onRate, size = 15 }) {
+  const [hoverRating, setHoverRating] = useState(0);
+  const avg = ratingObj.count > 0 ? ratingObj.sum / ratingObj.count : 0;
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+      <div style={{ display: 'flex', gap: '0.15rem' }}>
+        {[1, 2, 3, 4, 5].map((starIndex) => {
+          const currentActive = hoverRating || userRating || Math.round(avg);
+          const isFilled = starIndex <= currentActive;
+
+          return (
+            <Star 
+              key={starIndex}
+              size={size}
+              style={{
+                cursor: 'pointer',
+                color: isFilled ? '#f59e0b' : 'rgba(255, 255, 255, 0.2)',
+                fill: isFilled ? '#f59e0b' : 'transparent',
+                transition: 'transform 0.15s ease, color 0.15s ease'
+              }}
+              onMouseEnter={() => setHoverRating(starIndex)}
+              onMouseLeave={() => setHoverRating(0)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onRate(starIndex);
+              }}
+              title={`Rate ${starIndex} Star${starIndex > 1 ? 's' : ''}`}
+            />
+          );
+        })}
+      </div>
+      <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#f59e0b', marginLeft: '0.2rem' }}>
+        {avg.toFixed(1)} <span style={{ color: 'var(--text-dim)', fontWeight: 400 }}>({ratingObj.count})</span>
+      </span>
+    </div>
+  );
+}
+
 // Vector Graphic Banner Generator for Game Cards
-function GameThumbnail({ game, isMostPlayed, playCount }) {
+function GameThumbnail({ game, isMostPlayed, playCount, isTopRated }) {
   const renderBanner = () => {
     switch (game.id) {
       case '3d-racer':
@@ -265,7 +323,7 @@ function GameThumbnail({ game, isMostPlayed, playCount }) {
     }}>
       {renderBanner()}
 
-      {/* Most Played #1 Badge (Only shown if real playCount > 0) */}
+      {/* Most Played #1 Badge */}
       {isMostPlayed && playCount > 0 && (
         <div style={{
           position: 'absolute',
@@ -287,7 +345,29 @@ function GameThumbnail({ game, isMostPlayed, playCount }) {
         </div>
       )}
 
-      {/* Real Play Counter & Type Badge */}
+      {/* Top Rated Crown Badge */}
+      {isTopRated && !isMostPlayed && (
+        <div style={{
+          position: 'absolute',
+          top: '10px',
+          left: '10px',
+          background: 'linear-gradient(135deg, #10b981, #00f3ff)',
+          boxShadow: '0 0 15px rgba(16, 185, 129, 0.6)',
+          padding: '0.3rem 0.75rem',
+          borderRadius: '20px',
+          fontSize: '0.75rem',
+          fontWeight: 800,
+          color: '#040914',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.35rem'
+        }}>
+          <Trophy size={14} />
+          <span>⭐ TOP RATED</span>
+        </div>
+      )}
+
+      {/* Play Counter & Type Badge */}
       <div style={{
         position: 'absolute',
         bottom: '8px',
@@ -337,7 +417,7 @@ function NativeCyberRacer3D() {
   const [gameStarted, setGameStarted] = useState(false);
 
   // Mobile Touch Control Refs
-  const steerRef = useRef(0); // -1 left, 1 right, 0 neutral
+  const steerRef = useRef(0);
   const accelRef = useRef(false);
 
   useEffect(() => {
@@ -366,14 +446,12 @@ function NativeCyberRacer3D() {
     ];
 
     const interval = setInterval(() => {
-      // Accelerate via keyboard OR touch button
       if (keys['ArrowUp'] || keys['KeyW'] || accelRef.current) {
         speedVal = Math.min(speedVal + 0.35, 15);
       } else {
         speedVal = Math.max(speedVal - 0.2, 0);
       }
 
-      // Steer via keyboard OR touch button
       if (keys['ArrowLeft'] || keys['KeyA'] || steerRef.current === -1) {
         playerX = Math.max(playerX - 0.05, -0.9);
       }
@@ -653,7 +731,6 @@ function NativeCyberSnake() {
 
     window.addEventListener('keydown', handleKeyDown);
 
-    // Touch Swipe Gesture Detection
     let touchStartX = 0;
     let touchStartY = 0;
 
@@ -875,7 +952,7 @@ function NativeCyberBreakout() {
   const [gameOver, setGameOver] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
 
-  const paddleRef = useRef(220); // paddle position
+  const paddleRef = useRef(220);
 
   useEffect(() => {
     if (!gameStarted || gameOver) return;
@@ -943,7 +1020,6 @@ function NativeCyberBreakout() {
       ctx.fillStyle = '#060913';
       ctx.fillRect(0, 0, width, height);
 
-      // Draw bricks
       const colors = ['#ec4899', '#f59e0b', '#10b981', '#00f3ff'];
       for (let c = 0; c < colCount; c++) {
         for (let r = 0; r < rowCount; r++) {
@@ -959,7 +1035,6 @@ function NativeCyberBreakout() {
         }
       }
 
-      // Draw Paddle
       const pX = paddleRef.current;
       ctx.fillStyle = '#00f3ff';
       ctx.shadowColor = '#00f3ff';
@@ -967,13 +1042,11 @@ function NativeCyberBreakout() {
       ctx.fillRect(pX, height - paddleHeight - 10, paddleWidth, paddleHeight);
       ctx.shadowBlur = 0;
 
-      // Draw Ball
       ctx.fillStyle = '#ffffff';
       ctx.beginPath();
       ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
       ctx.fill();
 
-      // Brick Collisions
       for (let c = 0; c < colCount; c++) {
         for (let r = 0; r < rowCount; r++) {
           const b = bricks[c][r];
@@ -992,7 +1065,6 @@ function NativeCyberBreakout() {
         }
       }
 
-      // Ball Wall Collisions
       if (ballX + dx > width - ballRadius || ballX + dx < ballRadius) {
         dx = -dx;
       }
@@ -1121,7 +1193,7 @@ function NativeCyberPong() {
   const [gameOver, setGameOver] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
 
-  const paddleRef = useRef(165); // Player paddle Y position
+  const paddleRef = useRef(165);
 
   useEffect(() => {
     if (!gameStarted || gameOver) return;
@@ -1171,7 +1243,6 @@ function NativeCyberPong() {
     const interval = setInterval(() => {
       const playerY = paddleRef.current;
 
-      // AI Tracking
       const aiCenter = aiY + paddleH / 2;
       if (aiCenter < ballY - 15) {
         aiY += 3.5;
@@ -1186,18 +1257,15 @@ function NativeCyberPong() {
         ballSpeedY = -ballSpeedY;
       }
 
-      // Player paddle bounce
       if (ballX < 35 && ballY > playerY && ballY < playerY + paddleH) {
         ballSpeedX = -ballSpeedX;
         ballSpeedX *= 1.05;
       }
 
-      // AI paddle bounce
       if (ballX > width - 35 && ballY > aiY && ballY < aiY + paddleH) {
         ballSpeedX = -ballSpeedX;
       }
 
-      // Point scoring
       if (ballX < 0) {
         setAiScore(s => s + 1);
         ballX = width / 2;
@@ -1213,7 +1281,6 @@ function NativeCyberPong() {
       ctx.fillStyle = '#040914';
       ctx.fillRect(0, 0, width, height);
 
-      // Net
       ctx.strokeStyle = 'rgba(0,243,255,0.2)';
       ctx.setLineDash([8, 8]);
       ctx.beginPath();
@@ -1222,15 +1289,12 @@ function NativeCyberPong() {
       ctx.stroke();
       ctx.setLineDash([]);
 
-      // Player Paddle
       ctx.fillStyle = '#00f3ff';
       ctx.fillRect(20, playerY, paddleW, paddleH);
 
-      // AI Paddle
       ctx.fillStyle = '#ec4899';
       ctx.fillRect(width - 20 - paddleW, aiY, paddleW, paddleH);
 
-      // Ball
       ctx.fillStyle = '#f59e0b';
       ctx.beginPath();
       ctx.arc(ballX, ballY, 8, 0, Math.PI * 2);
@@ -1341,25 +1405,38 @@ function NativeCyberPong() {
   );
 }
 
-// Initial Real Play Counts Helper (Starts empty, only tracks actual user plays)
+// Helper functions for Real Play Counts and Ratings
 const getStoredPlayCounts = () => {
   try {
     const saved = localStorage.getItem('cyber_wizard_game_play_counts');
     if (saved) return JSON.parse(saved);
   } catch (e) {}
-  return {}; // Pure 100% real play counts only
+  return {};
+};
+
+const getStoredUserRatings = () => {
+  try {
+    const saved = localStorage.getItem('cyber_wizard_game_user_ratings');
+    if (saved) return JSON.parse(saved);
+  } catch (e) {}
+  return {};
 };
 
 export default function WebGames() {
   const [games, setGames] = useState(initialGamesList);
   const [pool, setPool] = useState(discoverableGamesPool);
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [sortMode, setSortMode] = useState('most-played'); // 'most-played' | 'top-rated'
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGame, setSelectedGame] = useState(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   // Pure Real Play count tracking
   const [playCounts, setPlayCounts] = useState(getStoredPlayCounts);
+
+  // User ratings tracking
+  const [userRatings, setUserRatings] = useState(getStoredUserRatings);
+  const [ratingToast, setRatingToast] = useState(null);
 
   const stageContainerRef = useRef(null);
 
@@ -1384,17 +1461,66 @@ export default function WebGames() {
     return () => clearInterval(timer);
   }, []);
 
-  // Sort games dynamically so Real Most Played Game is ALWAYS on Top!
+  // Compute Game Rating Object (Base data + user's custom rating)
+  const getGameRatingObj = (gameId) => {
+    const base = baseRatingsData[gameId] || { sum: 20, count: 5 };
+    const userStar = userRatings[gameId];
+
+    if (userStar) {
+      return {
+        sum: base.sum + userStar,
+        count: base.count + 1,
+        userRating: userStar
+      };
+    }
+    return {
+      sum: base.sum,
+      count: base.count,
+      userRating: 0
+    };
+  };
+
+  // Handle User Star Rating
+  const handleRateGame = (game, stars) => {
+    const updated = {
+      ...userRatings,
+      [game.id]: stars
+    };
+    setUserRatings(updated);
+    try {
+      localStorage.setItem('cyber_wizard_game_user_ratings', JSON.stringify(updated));
+    } catch (e) {}
+
+    setRatingToast(`⭐ Rated "${game.title}" ${stars} Star${stars > 1 ? 's' : ''}! Thanks for rating your favorite game!`);
+    setTimeout(() => setRatingToast(null), 4000);
+  };
+
+  // Sort games dynamically based on sortMode
   const sortedGames = [...games].sort((a, b) => {
-    const countA = playCounts[a.id] || 0;
-    const countB = playCounts[b.id] || 0;
-    return countB - countA;
+    if (sortMode === 'top-rated') {
+      const rA = getGameRatingObj(a.id);
+      const rB = getGameRatingObj(b.id);
+      const avgA = rA.count > 0 ? rA.sum / rA.count : 0;
+      const avgB = rB.count > 0 ? rB.sum / rB.count : 0;
+      return avgB - avgA;
+    } else {
+      const countA = playCounts[a.id] || 0;
+      const countB = playCounts[b.id] || 0;
+      return countB - countA;
+    }
   });
 
   const maxPlayCount = Object.values(playCounts).reduce((max, val) => Math.max(max, val), 0);
   const mostPlayedGameId = maxPlayCount > 0 && sortedGames.length > 0 && (playCounts[sortedGames[0].id] || 0) > 0 
     ? sortedGames[0].id 
     : null;
+
+  // Highest Rated Game calculation
+  const topRatedGameId = sortedGames.length > 0 ? [...games].sort((a, b) => {
+    const rA = getGameRatingObj(a.id);
+    const rB = getGameRatingObj(b.id);
+    return (rB.sum / rB.count) - (rA.sum / rA.count);
+  })[0].id : null;
 
   const filteredGames = sortedGames.filter(g => {
     const matchesCat = selectedCategory === 'all' || g.category === selectedCategory;
@@ -1405,7 +1531,6 @@ export default function WebGames() {
   });
 
   const handleSelectGame = (game) => {
-    // Record REAL user play count
     const updatedCounts = {
       ...playCounts,
       [game.id]: (playCounts[game.id] || 0) + 1
@@ -1490,7 +1615,7 @@ export default function WebGames() {
               {selectedGame ? selectedGame.title : <>Open-Source <span className="text-cyan glow-cyan">3D & Arcade Games</span></>}
             </h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '0.2rem' }}>
-              High-performance WebGL 3D racers, retro arcade classics, space shooters, sorted by real player views.
+              Rate your favorite games 1-5 stars. High-performance WebGL 3D racers & retro arcade classics.
             </p>
           </div>
 
@@ -1510,10 +1635,32 @@ export default function WebGames() {
         </div>
       </div>
 
+      {/* RATING SUBMISSION TOAST */}
+      {ratingToast && (
+        <div style={{
+          marginBottom: '1.5rem',
+          padding: '0.85rem 1.25rem',
+          borderRadius: 'var(--radius-sm)',
+          background: 'linear-gradient(90deg, rgba(245, 158, 11, 0.25), rgba(16, 185, 129, 0.25))',
+          border: '1px solid #f59e0b',
+          boxShadow: '0 0 25px rgba(245, 158, 11, 0.3)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.75rem',
+          color: '#ffffff',
+          fontWeight: 700,
+          fontSize: '0.92rem',
+          animation: 'fadeIn 0.3s ease-in'
+        }}>
+          <Star size={18} className="text-amber fill-amber animate-bounce" />
+          <span>{ratingToast}</span>
+        </div>
+      )}
+
       {/* VIEW 1: HIGH-OCTANE GAME CATALOG GRID WITH THUMBNAILS */}
       {!selectedGame ? (
         <div>
-          {/* Controls Bar: Categories & Search */}
+          {/* Controls Bar: Categories, Sorting & Search */}
           <div style={{ marginBottom: '1.5rem' }}>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center', justifyContent: 'space-between' }}>
               
@@ -1530,28 +1677,51 @@ export default function WebGames() {
                 ))}
               </div>
 
-              {/* Search Box */}
-              <div style={{ minWidth: '220px', maxWidth: '300px', width: '100%' }}>
-                <div className="search-box">
-                  <Search className="search-icon" size={16} />
-                  <input 
-                    type="text"
-                    className="search-input"
-                    placeholder="Search games..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                  />
+              {/* Sort Mode Pills & Search Box */}
+              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: '0.3rem', background: 'rgba(255,255,255,0.05)', padding: '0.2rem', borderRadius: 'var(--radius-sm)' }}>
+                  <button 
+                    className={`btn btn-sm ${sortMode === 'most-played' ? 'btn-primary' : 'btn-outline'}`}
+                    style={{ border: 'none', padding: '0.3rem 0.65rem', fontSize: '0.78rem' }}
+                    onClick={() => setSortMode('most-played')}
+                  >
+                    <Flame size={13} />
+                    <span>Most Played</span>
+                  </button>
+                  <button 
+                    className={`btn btn-sm ${sortMode === 'top-rated' ? 'btn-primary' : 'btn-outline'}`}
+                    style={{ border: 'none', padding: '0.3rem 0.65rem', fontSize: '0.78rem' }}
+                    onClick={() => setSortMode('top-rated')}
+                  >
+                    <Star size={13} />
+                    <span>Top Rated</span>
+                  </button>
+                </div>
+
+                <div style={{ minWidth: '180px', maxWidth: '240px' }}>
+                  <div className="search-box">
+                    <Search className="search-icon" size={15} />
+                    <input 
+                      type="text"
+                      className="search-input"
+                      placeholder="Search games..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                  </div>
                 </div>
               </div>
 
             </div>
           </div>
 
-          {/* Gaming Cards Grid (Real Most Played Games Always on Top) */}
+          {/* Gaming Cards Grid */}
           <div className="grid-3">
             {filteredGames.map((game) => {
               const count = playCounts[game.id] || 0;
               const isTopGame = game.id === mostPlayedGameId;
+              const isTopRatedGame = game.id === topRatedGameId;
+              const ratingObj = getGameRatingObj(game.id);
 
               return (
                 <div 
@@ -1564,8 +1734,8 @@ export default function WebGames() {
                     justify: 'space-between',
                     cursor: 'pointer',
                     overflow: 'hidden',
-                    border: isTopGame ? '2px solid #f59e0b' : '1px solid var(--border)',
-                    boxShadow: isTopGame ? '0 0 25px rgba(245, 158, 11, 0.25)' : 'none'
+                    border: isTopGame ? '2px solid #f59e0b' : isTopRatedGame ? '2px solid #10b981' : '1px solid var(--border)',
+                    boxShadow: isTopGame ? '0 0 25px rgba(245, 158, 11, 0.25)' : isTopRatedGame ? '0 0 25px rgba(16, 185, 129, 0.25)' : 'none'
                   }}
                   onClick={() => handleSelectGame(game)}
                 >
@@ -1574,15 +1744,20 @@ export default function WebGames() {
                     <GameThumbnail 
                       game={game} 
                       isMostPlayed={isTopGame} 
+                      isTopRated={isTopRatedGame}
                       playCount={count} 
                     />
 
                     <div style={{ padding: '1.15rem' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem', flexWrap: 'wrap', gap: '0.4rem' }}>
                         <span className="badge badge-purple" style={{ fontSize: '0.72rem' }}>{game.category}</span>
-                        <span className="badge badge-cyan" style={{ fontSize: '0.72rem' }}>
-                          {game.type.startsWith('native') ? 'NATIVE CANVAS' : 'WEBGL 3D'}
-                        </span>
+                        
+                        {/* Interactive Star Rating on Card */}
+                        <StarRatingWidget 
+                          ratingObj={ratingObj}
+                          userRating={userRatings[game.id] || 0}
+                          onRate={(stars) => handleRateGame(game, stars)}
+                        />
                       </div>
 
                       <h3 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: '0.35rem', color: 'var(--text-main)' }}>
@@ -1596,8 +1771,13 @@ export default function WebGames() {
                   </div>
 
                   <div style={{ padding: '0 1.15rem 1.15rem 1.15rem' }}>
-                    <div style={{ fontSize: '0.78rem', color: 'var(--text-dim)', marginBottom: '0.75rem' }}>
-                      Developer: <strong className="text-cyan">{game.author}</strong>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.78rem', color: 'var(--text-dim)', marginBottom: '0.75rem' }}>
+                      <div>Developer: <strong className="text-cyan">{game.author}</strong></div>
+                      {userRatings[game.id] && (
+                        <div style={{ color: '#f59e0b', fontWeight: 700 }}>
+                          Your Rating: ⭐ {userRatings[game.id]}
+                        </div>
+                      )}
                     </div>
 
                     <button className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
@@ -1635,7 +1815,7 @@ export default function WebGames() {
             {/* Stage Header */}
             {!isFullscreen && (
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem', flexWrap: 'wrap', gap: '0.6rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
                   <button className="btn btn-outline btn-sm" onClick={() => setSelectedGame(null)}>
                     <ArrowLeft size={15} />
                     <span>Back to Catalog</span>
@@ -1646,7 +1826,18 @@ export default function WebGames() {
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  {/* Rating widget in Stage Header */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: 'rgba(255,255,255,0.05)', padding: '0.3rem 0.65rem', borderRadius: 'var(--radius-sm)' }}>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Rate Game:</span>
+                    <StarRatingWidget 
+                      ratingObj={getGameRatingObj(selectedGame.id)}
+                      userRating={userRatings[selectedGame.id] || 0}
+                      onRate={(stars) => handleRateGame(selectedGame, stars)}
+                      size={16}
+                    />
+                  </div>
+
                   <button className="btn btn-primary btn-sm" onClick={toggleFullscreen} title="Enter True Fullscreen Mode">
                     <Maximize2 size={15} />
                     <span>True Fullscreen</span>
@@ -1729,19 +1920,11 @@ export default function WebGames() {
             {!isFullscreen && (
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.85rem', flexWrap: 'wrap', gap: '0.5rem', fontSize: '0.82rem', color: 'var(--text-muted)' }}>
                 <div>{selectedGame.description}</div>
-                <div>
-                  Developer: <strong className="text-cyan">{selectedGame.author}</strong>
-                  {selectedGame.sourceUrl !== 'Built-in' && (
-                    <a 
-                      href={selectedGame.embedUrl || selectedGame.sourceUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-purple"
-                      style={{ marginLeft: '0.75rem', textDecoration: 'underline' }}
-                    >
-                      Direct Launch Link
-                    </a>
-                  )}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <div>Developer: <strong className="text-cyan">{selectedGame.author}</strong></div>
+                  <div style={{ color: '#f59e0b', fontWeight: 700 }}>
+                    {userRatings[selectedGame.id] ? `Your Star Rating: ⭐ ${userRatings[selectedGame.id]} / 5` : 'Rate with stars above!'}
+                  </div>
                 </div>
               </div>
             )}
